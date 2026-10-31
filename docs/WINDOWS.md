@@ -149,6 +149,8 @@ docker compose -f docker-compose.windows.yml restart snowluma
 群里发 `/认主` 会被拒绝；已经绑定后，其他 QQ 不能覆盖。
 密码只保存哈希，连续输错 5 次会锁定 10 分钟。
 
+如果认主后还是不认识：先用主人号私聊发送 `/reset` 清除上下文，再问一次；还不行就把 `/认主 状态` 的输出和报错发给 AI 求助，不要发密码、API Key 或 `data\` 内容。
+
 ## 方案 B：Git Bash
 
 如果已经安装 Git for Windows，也可以用 bash 脚本：
