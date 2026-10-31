@@ -216,7 +216,8 @@ if (Test-Path $CredFile) {
 1. 机器人账号请使用 QQ 小号登录
 2. 用你的大号先加机器人小号为好友
 3. 用大号私聊机器人，发送：/认主 你的QQ
-4. 绑定后 AstrBot 会自动重启一次
+4. 设置换主密码：/认主 密码 你的密码
+5. 绑定后 AstrBot 会自动重启一次
 
 [下一步]
 1. 登录 AstrBot，配置模型 Provider 和 OneBot 平台
@@ -267,6 +268,7 @@ Write-Host "  2. SnowLuma 登录 → 确认 QQ 进程"
 Write-Host "  3. noVNC 扫码登录 QQ（建议用小号）"
 Write-Host "  4. AstrBot 新建 OneBot v11 平台，Token 与 SnowLuma 一致"
 Write-Host "  5. 用大号私聊机器人，发送 /认主 你的QQ"
+Write-Host "  6. 设置换主密码：/认主 密码 你的密码"
 Write-Host ''
 Write-Host "机器人账号建议使用 QQ 小号；大号只用来认主和聊天。"
 Write-Host ''

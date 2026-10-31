@@ -111,8 +111,31 @@ docker compose -f docker-compose.windows.yml restart snowluma
 /认主 你的QQ号
 ```
 
-3. 机器人会校验「发送者 QQ」和「填写的 QQ」是否一致
-4. 成功后自动写入插件配置和 AstrBot 管理员列表，并重启一次
+3. 设置换主密码：
+
+```text
+/认主 密码 你的密码
+```
+
+密码要求 8-64 位，至少包含一个字母和一个数字。
+
+4. 机器人会校验「发送者 QQ」和「填写的 QQ」是否一致
+5. 成功后自动写入插件配置和 AstrBot 管理员列表，并重启一次
+
+以后换主，用新 QQ 本人私聊：
+
+```text
+/认主 更换 新QQ 换主密码
+```
+
+验证通过后会清除旧 QQ 的管理权限，再绑定新 QQ。
+
+其他命令：
+
+```text
+/认主 改密码 旧密码 新密码
+/认主 状态
+```
 
 认主会写入：
 
@@ -121,9 +144,10 @@ docker compose -f docker-compose.windows.yml restart snowluma
 - `data\config\astrbot_plugin_dafeiyu_memory2_config.json`：`main_umo`
 - `data\config\astrbot_plugin_dafeiyu_heart_config.json`：`main_umo`
 - `data\cmd_config.json`：`admins_id`
-- `data\owner.json`：绑定记录
+- `data\owner.json`：绑定记录和密码哈希
 
 群里发 `/认主` 会被拒绝；已经绑定后，其他 QQ 不能覆盖。
+密码只保存哈希，连续输错 5 次会锁定 10 分钟。
 
 ## 方案 B：Git Bash
 

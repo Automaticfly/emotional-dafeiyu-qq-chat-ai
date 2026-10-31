@@ -13,7 +13,7 @@
 - 涟漪池数据库和其中摘录的日常碎事
 - 相册照片、照片备注和图片索引
 - `data/INITIAL_CREDENTIALS.txt` 里的初始账号密码
-- `data/owner.json` 里的主人 QQ 和 UMO
+- `data/owner.json` 里的主人 QQ、UMO 和换主密码哈希
 - 插件实际配置（可能包含 QQ 号/UMO）
 - 登录二维码、截图、语音样本、试听音频
 - 服务器 IP、SSH 私钥、面板密码、VNC 密码

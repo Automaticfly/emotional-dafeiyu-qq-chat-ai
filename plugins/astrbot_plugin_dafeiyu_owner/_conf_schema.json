@@ -18,8 +18,8 @@
     "default": 6
   },
   "allow_rebind": {
-    "description": "允许更换主人",
-    "hint": "默认关闭。开启后，其他 QQ 也可以用 /认主 覆盖当前主人，不建议。",
+    "description": "旧版直接覆盖主人（已废弃）",
+    "hint": "当前换主统一使用 /认主 更换 新QQ 密码，这个开关不再生效。",
     "type": "bool",
     "default": false
   }

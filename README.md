@@ -9,7 +9,7 @@
 >
 > 详细声明见 [DISCLAIMER.md](DISCLAIMER.md)。
 
-**当前版本：v1.2.2** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
+**当前版本：v1.2.3** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
 
 > **部署建议**
 >
@@ -266,7 +266,30 @@ noVNC      密码在 .env 的 VNC_PASSWORD
 ```
 
 3. 机器人会校验「发送者 QQ」和「填写的 QQ」是否一致
-4. 绑定成功后自动写入插件配置和 AstrBot 管理员列表，并重启一次
+4. 接着设置换主密码：
+
+```text
+/认主 密码 你的密码
+```
+
+密码要求 8-64 位，至少包含一个字母和一个数字，不能是纯数字或和 QQ 相同。
+
+5. 绑定成功后自动写入插件配置和 AstrBot 管理员列表，并重启一次
+
+以后需要换主时，新号本人私聊机器人：
+
+```text
+/认主 更换 新QQ 换主密码
+```
+
+验证通过后会清除旧 QQ 的管理权限，再绑定新 QQ。
+
+其他命令：
+
+```text
+/认主 改密码 旧密码 新密码   修改换主密码
+/认主 状态                   查看当前主人和密码状态
+```
 
 认主后会写入：
 
@@ -274,9 +297,10 @@ noVNC      密码在 .env 的 VNC_PASSWORD
 - `ripple`：`admin_qq`、`admin_umo`
 - `memory2` / `heart`：`main_umo`
 - AstrBot：`admins_id`
-- `data/owner.json`：绑定记录
+- `data/owner.json`：绑定记录和密码哈希
 
 群里发 `/认主` 会被拒绝；已经绑定后，其他 QQ 不能覆盖。
+密码只保存哈希，不保存明文；连续输错 5 次会锁定 10 分钟。
 
 如果出现权限问题：
 
