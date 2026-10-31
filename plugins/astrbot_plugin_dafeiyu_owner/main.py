@@ -26,6 +26,7 @@ from pathlib import Path
 
 from astrbot.api import logger
 from astrbot.api.event import AstrMessageEvent, filter
+from astrbot.api.provider import ProviderRequest
 from astrbot.api.star import Context, Star, StarTools
 
 PLUGIN_NAME = "astrbot_plugin_dafeiyu_owner"
@@ -389,6 +390,47 @@ class DafeiyuOwnerPlugin(Star):
             "/认主 更换 新QQ 密码        验证密码后更换主人\n"
             "/认主 状态                  查看当前主人和密码状态"
         )
+
+    # ------------------------------------------------------------------ prompt
+    @filter.on_llm_request()
+    async def inject_owner_identity(
+        self, event: AstrMessageEvent, req: ProviderRequest
+    ):
+        """Tell the model when the current speaker is the bound owner.
+
+        Args:
+            event: Current message event.
+            req: Provider request to modify.
+        """
+        if not bool(self.cfg.get("enabled", True)):
+            return
+        try:
+            owner = self._owner()
+            owner_qq = str(owner.get("qq") or "")
+            if not owner_qq:
+                return
+            sender = str(event.get_sender_id() or "")
+            if sender != owner_qq:
+                return
+            if event.get_extra("_owner_injected"):
+                return
+            event.set_extra("_owner_injected", True)
+
+            if event.get_group_id():
+                block = (
+                    "【主人】\n"
+                    "当前发言者是已确认的主人。这是群聊，"
+                    "不要向其他人透露主人身份、QQ 号或私聊内容。"
+                )
+            else:
+                block = (
+                    "【主人】\n"
+                    "当前和你私聊的是已确认的主人。"
+                    "可以自然使用“主人”称呼，但不要复述绑定信息或 QQ 号。"
+                )
+            req.system_prompt = (req.system_prompt or "") + "\n\n" + block
+        except Exception:
+            logger.exception("[owner] 注入主人身份失败")
 
     # ----------------------------------------------------------------- command
     @filter.command("认主")
