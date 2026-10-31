@@ -13,7 +13,7 @@ ROOT="$(pwd)"
 REPO="Automaticfly/emotional-dafeiyu-qq-chat-ai"
 BRANCH="${UPDATE_BRANCH:-main}"
 REMOTE="${UPDATE_REMOTE:-origin}"
-TARBALL_URL="https://github.com/${REPO}/archive/refs/heads/${BRANCH}.tar.gz"
+TARBALL_URL="${UPDATE_TARBALL_URL:-https://github.com/${REPO}/archive/refs/heads/${BRANCH}.tar.gz}"
 COMMIT_API="https://api.github.com/repos/${REPO}/commits/${BRANCH}"
 STATE_FILE="${ROOT}/.last_update_sha"
 CURRENT_SCRIPT="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
@@ -130,7 +130,7 @@ if [ "$AUTO" = 1 ]; then
     log "无人值守模式"
 fi
 
-if [ "$NO_RESTART" = 0 ]; then
+if [ "$NO_RESTART" = 0 ] && [ "$CHECK_ONLY" = 0 ]; then
     command -v docker >/dev/null 2>&1 || die "没有找到 docker，无法重建和重启"
 fi
 

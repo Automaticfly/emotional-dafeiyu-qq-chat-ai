@@ -142,6 +142,7 @@ Windows 下更新时，正在运行的 `update.sh` 会写成 `update.sh.new`，�
 
 - **提示“没有 .git，使用压缩包同步”**：正常，说明是下载的 zip 部署
 - **提示工作区有改动**：先 `git status` 看看，提交或 `--stash`
-- **拉取失败**：确认能访问 GitHub；也可以手动下载新压缩包覆盖代码，保留 `data/` 和 `.env`
+- **拉取失败 / 下载超时**：确认能访问 GitHub；可以换镜像地址再试：
+  `UPDATE_TARBALL_URL=https://gh-proxy.com/https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/archive/refs/heads/main.tar.gz bash scripts/update.sh`
 - **重建失败**：先 `docker compose logs astrbot` 看错误；旧文件在 `backups/update-<时间>/`
 - **更新后没变化**：确认执行了 `docker compose up -d`，或直接 `bash scripts/update.sh` 不加 `--no-restart`
