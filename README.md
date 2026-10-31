@@ -9,7 +9,7 @@
 >
 > 详细声明见 [DISCLAIMER.md](DISCLAIMER.md)。
 
-**当前版本：v1.1.3** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
+**当前版本：v1.1.4** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
 
 一只住在 QQ 里的蓝色鲸鱼娘。她可以聊天、发语音、发表情包、记住重要的事，
 也可以在 QQ 空间写一条不泄露隐私的日常动态。
@@ -294,6 +294,13 @@ noVNC      密码在 .env 的 VNC_PASSWORD
 密码只保存哈希，不保存明文；连续输错 5 次会锁定 10 分钟。
 
 认主后，机器人在私聊里会知道当前是主人；主人在群里发言时也知道，但不会向群友透露身份和私聊内容。
+
+如果认主后还是不认识：
+
+1. 用主人号私聊发送 `/reset` 清除当前会话上下文
+2. 再问一次「主人是谁」
+3. 还不行就把 `/认主 状态` 的输出和报错发给 AI 求助
+4. 不要把密码、API Key、完整 QQ 号或 `data/` 内容发给 AI
 
 如果出现权限问题：
 
