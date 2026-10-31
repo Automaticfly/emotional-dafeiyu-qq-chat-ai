@@ -11,6 +11,15 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 ROOT="$(pwd)"
 
+# Windows Git Bash 使用 Windows 专用 compose。
+COMPOSE_FILE="docker-compose.yml"
+case "$(uname -s)" in
+    MINGW* | MSYS* | CYGWIN*) COMPOSE_FILE="docker-compose.windows.yml" ;;
+esac
+if [ ! -f "$COMPOSE_FILE" ]; then
+    COMPOSE_FILE="docker-compose.yml"
+fi
+
 PURGE=0
 REMOVE_IMAGES=0
 ASSUME_YES=0
@@ -81,9 +90,9 @@ if command -v docker >/dev/null 2>&1; then
         echo "提示：当前用户无权访问 Docker，跳过容器清理。"
         echo "如需清理容器，请用 sudo 重新运行：sudo bash scripts/uninstall.sh"
     elif docker compose version >/dev/null 2>&1; then
-        docker compose down --remove-orphans || true
+        docker compose -f "$COMPOSE_FILE" down --remove-orphans || true
     elif command -v docker-compose >/dev/null 2>&1; then
-        docker-compose down --remove-orphans || true
+        docker-compose -f "$COMPOSE_FILE" down --remove-orphans || true
     else
         echo "没有 docker compose，跳过容器清理。"
     fi

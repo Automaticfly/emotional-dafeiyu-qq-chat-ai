@@ -5,6 +5,33 @@
 
 ## [未发布]
 
+## [1.2.0] - 2026-10-31
+
+Windows 本地部署版本。
+
+### 新增
+
+- Windows 原生 PowerShell 脚本：
+  - `scripts/install.ps1`：检查 Docker Desktop、创建目录、生成配置、构建启动、保存初始账号密码
+  - `scripts/update.ps1`：git 快进或压缩包同步，支持 `-Check`、`-NoRestart`、`-Stash`
+  - `scripts/uninstall.ps1`：停止容器，支持 `-Purge`、`-RemoveImages`
+- `docker-compose.windows.yml`：去掉 `/etc/localtime`、`/etc/timezone` 挂载，时区由 `TZ` 控制
+- `docs/WINDOWS.md`：Docker Desktop + WSL2 本地部署完整指南
+- Git Bash 下 `install.sh` / `update.sh` / `uninstall.sh` 会自动切换到 Windows compose
+- PowerShell 安装同样会生成 `data\INITIAL_CREDENTIALS.txt`，并尝试收紧文件权限
+
+### 变更
+
+- README 增加 Windows 本地部署入口和仓库结构说明
+- `scripts/README.md` 增加 Windows 脚本说明
+- 更新脚本同步 `docs/` 和 `docker-compose.windows.yml`
+
+### 升级注意
+
+- 无破坏性变更
+- Windows 用户建议直接运行 `scripts\install.ps1`
+- Linux / 云端部署继续使用 `scripts/install.sh`，不受影响
+
 ## [1.1.0] - 2026-10-31
 
 安装体验与首次登录引导版本。

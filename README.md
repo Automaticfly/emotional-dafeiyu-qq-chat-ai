@@ -9,7 +9,7 @@
 >
 > 详细声明见 [DISCLAIMER.md](DISCLAIMER.md)。
 
-**当前版本：v1.1.0** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
+**当前版本：v1.2.0** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
 
 一只住在 QQ 里的蓝色鲸鱼娘。她可以聊天、发语音、发表情包、记住重要的事，
 也可以在 QQ 空间写一条不泄露隐私的日常动态。
@@ -144,7 +144,8 @@ flowchart LR
 
 ```text
 .
-├── docker-compose.yml            # AstrBot + SnowLuma
+├── docker-compose.yml            # Linux / 云端部署
+├── docker-compose.windows.yml    # Windows 本地部署（去掉 Linux 专用挂载）
 ├── Dockerfile.astrbot            # 带核心补丁的 AstrBot 镜像
 ├── patches/
 │   ├── volcengine_tts.py         # 豆包 Seed-TTS v3 适配
@@ -167,6 +168,8 @@ flowchart LR
 │   ├── ripple.example.json
 │   └── CONFIGURATION.md
 ├── assets/stickers/dafeiyu/      # 100 张 GIF 及分类目录
+├── docs/
+│   └── WINDOWS.md                # Windows 本地部署指南
 └── scripts/
 ```
 
@@ -174,7 +177,7 @@ flowchart LR
 
 ### 1. 准备环境
 
-- Linux 服务器或本机 Docker
+- Linux 服务器、Windows（Docker Desktop + WSL2）或本机 Docker
 - Docker Compose
 - 可选：Ollama、DeepSeek API、火山引擎 TTS、SnowLuma
 
@@ -262,6 +265,20 @@ sudo bash scripts/install.sh
 sudo usermod -aG docker $USER
 newgrp docker
 ```
+
+### Windows 本地部署
+
+Windows 上用 Docker Desktop（WSL2 后端）运行，不需要云服务器：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\install.ps1
+```
+
+- 使用 `docker-compose.windows.yml`，去掉了 Linux 专用的 `/etc/localtime` 挂载
+- PowerShell 脚本覆盖安装、更新、卸载
+- 也可以用 Git Bash 运行 `bash scripts/install.sh`
+- 初始账号密码同样保存在 `data\INITIAL_CREDENTIALS.txt`
+- 详细步骤、Ollama 配置和常见问题见 [docs/WINDOWS.md](docs/WINDOWS.md)
 
 ### 更新
 

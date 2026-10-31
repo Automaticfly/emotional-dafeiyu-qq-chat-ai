@@ -8,6 +8,16 @@
 | `update.sh` | 从 GitHub 同步最新代码，重建并重启容器 |
 | `uninstall.sh` | 停止并删除容器，可选删除数据 |
 
+Windows 原生 PowerShell 脚本：
+
+| 脚本 | 作用 |
+|---|---|
+| `install.ps1` | Windows 首次安装，使用 `docker-compose.windows.yml` |
+| `update.ps1` | Windows 更新，支持 `-Check`、`-NoRestart`、`-Stash` |
+| `uninstall.ps1` | Windows 卸载，支持 `-Purge`、`-RemoveImages` |
+
+Windows 完整步骤见 [docs/WINDOWS.md](../docs/WINDOWS.md)。
+
 ## 安装
 
 ```bash
@@ -67,6 +77,33 @@ newgrp docker
 ```
 
 用 sudo 安装时，脚本会把 `data/` 和 `.env` 的所有权交还给 `SUDO_USER`，避免之后更新或删除时再次遇到权限问题。
+
+## Windows
+
+Windows 用 Docker Desktop（WSL2 后端）运行：
+
+```powershell
+# 安装
+powershell -ExecutionPolicy Bypass -File scripts\install.ps1
+
+# 检查更新
+powershell -ExecutionPolicy Bypass -File scripts\update.ps1 -Check
+
+# 更新
+powershell -ExecutionPolicy Bypass -File scripts\update.ps1
+
+# 卸载（保留数据）
+powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1
+
+# 卸载并删除数据
+powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -Purge
+```
+
+- 需要 Docker Desktop，并启用 WSL2 后端
+- 使用 `docker-compose.windows.yml`，去掉 `/etc/localtime` 等 Linux 专用挂载
+- 初始账号密码写入 `data\INITIAL_CREDENTIALS.txt`
+- 正在运行的 `update.ps1` 会更新为 `update.ps1.new`，下次手动替换
+- 完整说明见 [docs/WINDOWS.md](../docs/WINDOWS.md)
 
 ## 更新
 

@@ -55,7 +55,19 @@ else
     err "没有找到 docker compose，请安装 Docker Compose 插件。"
     exit 1
 fi
-compose() { "${COMPOSE[@]}" "$@"; }
+
+# Windows 的 Git Bash 没有 /etc/localtime，改用 Windows 专用 compose。
+COMPOSE_FILE="docker-compose.yml"
+case "$(uname -s)" in
+    MINGW* | MSYS* | CYGWIN*)
+        COMPOSE_FILE="docker-compose.windows.yml"
+        info "检测到 Windows（Git Bash），使用 docker-compose.windows.yml"
+        ;;
+esac
+if [ ! -f "$COMPOSE_FILE" ]; then
+    COMPOSE_FILE="docker-compose.yml"
+fi
+compose() { "${COMPOSE[@]}" -f "$COMPOSE_FILE" "$@"; }
 
 # ---------------------------------------------------------------- 工具函数
 generate_password() {

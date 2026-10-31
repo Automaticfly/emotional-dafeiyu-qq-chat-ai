@@ -27,6 +27,15 @@ COMMIT_API="https://api.github.com/repos/${REPO}/commits/${BRANCH}"
 STATE_FILE="${ROOT}/.last_update_sha"
 CURRENT_SCRIPT="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
 
+# Windows Git Bash 使用 Windows 专用 compose（去掉 /etc/localtime 挂载）。
+COMPOSE_FILE="docker-compose.yml"
+case "$(uname -s)" in
+    MINGW* | MSYS* | CYGWIN*) COMPOSE_FILE="docker-compose.windows.yml" ;;
+esac
+if [ ! -f "$COMPOSE_FILE" ]; then
+    COMPOSE_FILE="docker-compose.yml"
+fi
+
 CHECK_ONLY=0
 NO_RESTART=0
 ASSUME_YES=0
@@ -81,9 +90,9 @@ confirm() {
 
 compose() {
     if docker compose version >/dev/null 2>&1; then
-        docker compose "$@"
+        docker compose -f "$COMPOSE_FILE" "$@"
     else
-        docker-compose "$@"
+        docker-compose -f "$COMPOSE_FILE" "$@"
     fi
 }
 
@@ -269,11 +278,12 @@ else
     for rel in \
         Dockerfile.astrbot .dockerignore .gitattributes .gitignore \
         README.md ARCHITECTURE.md COMMANDS.md CHANGELOG.md DISCLAIMER.md \
-        LICENSE PRIVACY.md THIRD_PARTY_NOTICES.md RELEASING.md; do
+        LICENSE PRIVACY.md THIRD_PARTY_NOTICES.md RELEASING.md \
+        docker-compose.windows.yml; do
         replace_path "$rel"
     done
 
-    for rel in patches config persona assets; do
+    for rel in patches config persona assets docs; do
         replace_path "$rel"
     done
 
