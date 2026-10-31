@@ -9,7 +9,7 @@
 >
 > 详细声明见 [DISCLAIMER.md](DISCLAIMER.md)。
 
-**当前版本：v1.2.3** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
+**当前版本：v1.2.4** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
 
 > **部署建议**
 >
@@ -301,6 +301,8 @@ noVNC      密码在 .env 的 VNC_PASSWORD
 
 群里发 `/认主` 会被拒绝；已经绑定后，其他 QQ 不能覆盖。
 密码只保存哈希，不保存明文；连续输错 5 次会锁定 10 分钟。
+
+认主后，机器人在私聊里会知道当前是主人；主人在群里发言时也知道，但不会向群友透露身份和私聊内容。
 
 如果出现权限问题：
 
