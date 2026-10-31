@@ -18,6 +18,12 @@ Windows 原生 PowerShell 脚本：
 
 Windows 完整步骤见 [docs/WINDOWS.md](../docs/WINDOWS.md)。
 
+## 部署建议
+
+第一次部署建议让 AI 协助：把仓库链接、系统环境（Windows / Linux）、Docker Desktop 状态和报错信息发给 AI，让它按 README、[docs/WINDOWS.md](../docs/WINDOWS.md) 和本文件带你一步步排查。
+
+不要把真实 API Key、QQ 号、密码、聊天记录或 `data/` 内容发给 AI。
+
 ## 安装
 
 ```bash

@@ -9,7 +9,13 @@
 >
 > 详细声明见 [DISCLAIMER.md](DISCLAIMER.md)。
 
-**当前版本：v1.2.0** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
+**当前版本：v1.2.1** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
+
+> **部署建议**
+>
+> 第一次部署建议让 AI 协助：把仓库链接、你的系统（Windows / Linux）和已经安装的软件发给 AI，
+> 让它按 README 和 [docs/WINDOWS.md](docs/WINDOWS.md) 一步一步带你配置和排错。
+> 不要把真实 API Key、QQ 号、密码、聊天记录或 `data/` 内容发给 AI。
 
 一只住在 QQ 里的蓝色鲸鱼娘。她可以聊天、发语音、发表情包、记住重要的事，
 也可以在 QQ 空间写一条不泄露隐私的日常动态。

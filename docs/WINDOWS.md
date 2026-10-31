@@ -2,6 +2,12 @@
 
 这个项目可以在 Windows 上本地运行，不需要云服务器。
 
+> **部署建议**
+>
+> 第一次部署可以让 AI 协助：把本文件或仓库链接发给 AI，说明你的 Windows 版本、
+> Docker Desktop 是否已启动、卡在哪一步，让它按下面的步骤带你排查。
+> 不要粘贴真实 API Key、QQ 号、密码、聊天记录或 `data\` 内容。
+
 原理：AstrBot 和 SnowLuma 都是 **Linux 容器**，Windows 上用 Docker Desktop 的 WSL2 后端运行它们。QQ 登录通过浏览器里的 noVNC 扫码，不需要安装 Windows 版 QQ。
 
 ## 前置条件

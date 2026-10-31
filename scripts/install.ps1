@@ -263,3 +263,5 @@ Write-Host "  4. AstrBot 新建 OneBot v11 平台，Token 与 SnowLuma 一致"
 Write-Host ''
 Write-Host "更新：powershell -ExecutionPolicy Bypass -File scripts\update.ps1"
 Write-Host "卸载：powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1"
+Write-Host ''
+Write-Host "遇到问题可以让 AI 协助：把报错和系统环境发给它，不要发真实密钥。"

@@ -251,3 +251,5 @@ echo "  4. AstrBot 新建 OneBot v11 平台，Token 与 SnowLuma 一致"
 echo
 echo "更新：bash scripts/update.sh"
 echo "卸载：bash scripts/uninstall.sh"
+echo
+echo "遇到问题可以让 AI 协助：把报错和系统环境发给它，不要发真实密钥。"
