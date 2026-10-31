@@ -72,6 +72,23 @@ ollama pull bge-m3
 
 ## 3. 插件配置
 
+### 先用 /认主 绑定主人
+
+新部署建议先用大号私聊机器人：
+
+```text
+/认主 你的QQ号
+```
+
+机器人会校验发送者 QQ，自动写入：
+
+- `social` 的 `admin_qq` / `admin_umo` / `qzone_auto_umo`
+- `ripple` 的 `admin_qq` / `admin_umo`
+- `memory2` / `heart` 的 `main_umo`
+- AstrBot 的 `admins_id`
+
+写入后会自动重启一次。下面的手动配置用于排查问题或特殊平台。
+
 ### 社交 / 动态 / 表情包
 
 `astrbot_plugin_dafeiyu_social`：

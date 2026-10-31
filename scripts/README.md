@@ -43,6 +43,19 @@ data/INITIAL_CREDENTIALS.txt
 
 如果日志里没抓到密码（例如已经改过密码），文件里会写「未捕获」，并给出查看日志和重置的方法。
 
+### 绑定主人
+
+机器人账号建议用 **QQ 小号** 登录。安装完成后，用大号私聊机器人：
+
+```text
+/认主 你的QQ号
+```
+
+会自动写入 `social` / `ripple` / `memory2` / `heart` 的主人配置和 AstrBot 的
+`admins_id`，然后重启一次。群里发会被拒绝，已绑定后其他 QQ 不能覆盖。
+
+详见 [plugins/astrbot_plugin_dafeiyu_owner/README.md](../plugins/astrbot_plugin_dafeiyu_owner/README.md)。
+
 ### 权限问题
 
 如果出现：

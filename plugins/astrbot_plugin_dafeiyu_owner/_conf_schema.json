@@ -1,0 +1,26 @@
+{
+  "enabled": {
+    "description": "启用认主命令",
+    "hint": "关闭后 /认主 不响应，已绑定的主人配置仍然保留。",
+    "type": "bool",
+    "default": true
+  },
+  "auto_restart": {
+    "description": "认主后自动重启 AstrBot",
+    "hint": "写入配置后自动重启一次，让管理权限和插件配置生效。",
+    "type": "bool",
+    "default": true
+  },
+  "restart_delay_seconds": {
+    "description": "重启前等待秒数",
+    "hint": "留出时间把认主结果发给用户，默认 6 秒。",
+    "type": "int",
+    "default": 6
+  },
+  "allow_rebind": {
+    "description": "允许更换主人",
+    "hint": "默认关闭。开启后，其他 QQ 也可以用 /认主 覆盖当前主人，不建议。",
+    "type": "bool",
+    "default": false
+  }
+}

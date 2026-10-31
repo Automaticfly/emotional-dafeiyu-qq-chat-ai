@@ -191,6 +191,12 @@ collect_credentials() {
         echo "地址：http://127.0.0.1:6081/vnc.html?autoconnect=1"
         echo "密码：${VNC_PASSWORD_VALUE:-见 .env 的 VNC_PASSWORD}"
         echo
+        echo "[绑定主人]"
+        echo "1. 机器人账号请使用 QQ 小号登录"
+        echo "2. 用你的大号先加机器人小号为好友"
+        echo "3. 用大号私聊机器人，发送：/认主 你的QQ"
+        echo "4. 绑定后 AstrBot 会自动重启一次"
+        echo
         echo "[下一步]"
         echo "1. 登录 AstrBot，配置模型 Provider 和 OneBot 平台"
         echo "2. 登录 SnowLuma，确认 QQ 进程在线"
@@ -234,8 +240,11 @@ echo
 echo "首次使用顺序："
 echo "  1. AstrBot 登录 → 配置模型 Provider"
 echo "  2. SnowLuma 登录 → 确认 QQ 进程"
-echo "  3. noVNC 扫码登录 QQ"
+echo "  3. noVNC 扫码登录 QQ（建议用小号）"
 echo "  4. AstrBot 新建 OneBot v11 平台，Token 与 SnowLuma 一致"
+echo "  5. 用大号私聊机器人，发送 /认主 你的QQ"
+echo
+echo "机器人账号建议使用 QQ 小号；大号只用来认主和聊天。"
 echo
 echo "更新：bash scripts/update.sh"
 echo "卸载：bash scripts/uninstall.sh"

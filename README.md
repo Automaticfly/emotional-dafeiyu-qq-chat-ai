@@ -9,7 +9,7 @@
 >
 > 详细声明见 [DISCLAIMER.md](DISCLAIMER.md)。
 
-**当前版本：v1.1.0** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
+**当前版本：v1.1.1** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
 
 一只住在 QQ 里的蓝色鲸鱼娘。她可以聊天、发语音、发表情包、记住重要的事，
 也可以在 QQ 空间写一条不泄露隐私的日常动态。
@@ -99,6 +99,7 @@
 
 ### 部署与安全
 
+- 机器人账号建议使用 QQ 小号，大号通过 `/认主` 绑定为唯一主人
 - Docker Compose 管理 AstrBot + SnowLuma
 - SnowLuma 使用真实 Linux QQ，支持 OneBot v11
 - WebUI 和 noVNC 只绑定 `127.0.0.1`，通过 SSH 隧道访问
@@ -154,6 +155,7 @@ flowchart LR
 │   ├── astrbot_plugin_dafeiyu_heart/
 │   ├── astrbot_plugin_dafeiyu_memory2/
 │   ├── astrbot_plugin_dafeiyu_ripple/
+│   ├── astrbot_plugin_dafeiyu_owner/
 │   ├── astrbot_plugin_dafeiyu_context/
 │   ├── astrbot_plugin_dafeiyu_social/
 │   ├── astrbot_plugin_dafeiyu_moodface/
@@ -243,6 +245,30 @@ noVNC      密码在 .env 的 VNC_PASSWORD
 
 三个密码都会写进 `data/INITIAL_CREDENTIALS.txt`（权限 600）。登录后请立即修改密码并删除该文件。
 
+### 绑定主人
+
+机器人账号建议使用 **QQ 小号**，你的大号用来认主和日常聊天。
+
+1. 用大号先加机器人小号为好友
+2. 用大号私聊机器人，发送：
+
+```text
+/认主 你的QQ号
+```
+
+3. 机器人会校验「发送者 QQ」和「填写的 QQ」是否一致
+4. 绑定成功后自动写入插件配置和 AstrBot 管理员列表，并重启一次
+
+认主后会写入：
+
+- `social`：`admin_qq`、`admin_umo`、`qzone_auto_umo`
+- `ripple`：`admin_qq`、`admin_umo`
+- `memory2` / `heart`：`main_umo`
+- AstrBot：`admins_id`
+- `data/owner.json`：绑定记录
+
+群里发 `/认主` 会被拒绝；已经绑定后，其他 QQ 不能覆盖。
+
 如果出现权限问题：
 
 ```text
@@ -309,6 +335,7 @@ bash scripts/uninstall.sh --remove-images
 /涟漪 列表     查看池子里的小事
 /涟漪 摘录     立刻摘一次最近聊天
 /涟漪 记       手动放一件小事进池子
+/认主          用大号私聊绑定主人
 /相册          查看相册和备注
 /相册备注      给最新一张照片加一句备注
 /上下文        查看最近上下文

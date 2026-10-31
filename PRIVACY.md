@@ -13,6 +13,7 @@
 - 涟漪池数据库和其中摘录的日常碎事
 - 相册照片、照片备注和图片索引
 - `data/INITIAL_CREDENTIALS.txt` 里的初始账号密码
+- `data/owner.json` 里的主人 QQ 和 UMO
 - 插件实际配置（可能包含 QQ 号/UMO）
 - 登录二维码、截图、语音样本、试听音频
 - 服务器 IP、SSH 私钥、面板密码、VNC 密码
@@ -37,6 +38,7 @@ data/plugin_data/astrbot_plugin_dafeiyu_ripple/ripple.db
 data/plugin_data/astrbot_plugin_dafeiyu_social/album.db
 data/plugin_data/astrbot_plugin_dafeiyu_social/album/
 data/INITIAL_CREDENTIALS.txt
+data/owner.json
 data/logs/
 data/snowluma/
 data/snowluma-qq-config/
@@ -52,9 +54,10 @@ data/snowluma-qq-data/
 2. 打开 `data/INITIAL_CREDENTIALS.txt`，用里面的初始账号密码登录 AstrBot 和 SnowLuma
 3. 修改两个面板的密码，然后删除 `data/INITIAL_CREDENTIALS.txt`
 4. 在 AstrBot WebUI 创建自己的 provider、平台和 token
-5. 在插件配置里填写自己的管理员 QQ / UMO
-6. 用自己的 QQ 扫码登录 SnowLuma
-7. 用 `/lmem` 和插件命令确认记忆和媒体正常
+5. 用 QQ 小号扫码登录 SnowLuma
+6. 用大号私聊机器人发送 `/认主 你的QQ` 绑定主人
+7. 在插件配置里确认管理员 QQ / UMO
+8. 用 `/lmem` 和插件命令确认记忆和媒体正常
 
 ## 提交前检查
 
