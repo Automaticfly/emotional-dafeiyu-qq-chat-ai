@@ -9,6 +9,8 @@
 >
 > 详细声明见 [DISCLAIMER.md](DISCLAIMER.md)。
 
+**当前版本：v1.0.0** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases)
+
 一只住在 QQ 里的蓝色鲸鱼娘。她可以聊天、发语音、发表情包、记住重要的事，
 也可以在 QQ 空间写一条不泄露隐私的日常动态。
 
