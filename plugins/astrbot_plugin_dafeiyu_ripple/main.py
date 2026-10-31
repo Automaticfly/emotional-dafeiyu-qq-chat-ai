@@ -1096,12 +1096,15 @@ class DafeiyuRipplePlugin(Star):
                 logger.exception(f"[ripple] 摘录会话失败: {umo}")
         await self._meta_set("last_extract_date", today)
 
-    async def _extract_one(self, umo: str, now: datetime) -> None:
+    async def _extract_one(self, umo: str, now: datetime) -> int:
         """Extract up to a few trivial memories from one session.
 
         Args:
             umo: Unified message origin.
             now: Current local time.
+
+        Returns:
+            Number of memories inserted or merged.
         """
         since = (now - timedelta(hours=24)).isoformat(timespec="seconds")
         await self._ensure_db()
@@ -1114,7 +1117,7 @@ class DafeiyuRipplePlugin(Star):
             )
             messages = await cursor.fetchall()
         if len(messages) < 4:
-            return
+            return 0
         transcript = "\n".join(
             f"{'主人' if row['role'] == 'user' else '大肥鱼'}：{row['content']}"
             for row in messages
@@ -1126,10 +1129,10 @@ class DafeiyuRipplePlugin(Star):
             provider = await self.context.get_using_provider_async(umo)
         except Exception:
             logger.exception(f"[ripple] 获取对话模型失败: {umo}")
-            return
+            return 0
         if provider is None:
             logger.warning(f"[ripple] 没有可用对话模型，跳过摘录: {umo}")
-            return
+            return 0
         count = self._cfg_int("max_items_per_extract", 3, 1, 10)
         prompt = self._build_extract_prompt(transcript, count, now)
         try:
@@ -1144,14 +1147,14 @@ class DafeiyuRipplePlugin(Star):
             raw = str(getattr(resp, "completion_text", "") or "").strip()
         except Exception:
             logger.exception(f"[ripple] 摘录模型调用失败: {umo}")
-            return
+            return 0
         data = _extract_json(raw)
         if data is None:
             logger.warning(f"[ripple] 摘录结果不是 JSON: {umo} {raw[:120]}")
-            return
+            return 0
         items = data.get("items")
         if not isinstance(items, list):
-            return
+            return 0
         inserted = 0
         async with aiosqlite.connect(self.db_path) as db:
             db.row_factory = aiosqlite.Row
@@ -1174,6 +1177,7 @@ class DafeiyuRipplePlugin(Star):
             await db.commit()
         if inserted:
             logger.info(f"[ripple] 本轮摘录 {inserted} 条: {umo}")
+        return inserted
 
     def _build_extract_prompt(self, transcript: str, count: int, now: datetime) -> str:
         """Build the nightly extraction prompt.
@@ -1387,6 +1391,43 @@ class DafeiyuRipplePlugin(Star):
         parts = args.split()
         action = parts[0]
         target = parts[1] if len(parts) > 1 else ""
+        if action in {"摘录", "extract"}:
+            count = await self._extract_one(umo, now)
+            if count:
+                yield event.plain_result(
+                    f"摘录跑完了，新入池或合并 {count} 条。用 /涟漪 列表 看看。"
+                )
+            else:
+                yield event.plain_result(
+                    "这次没摘到合适的小事（聊天太少、模型没给结果，或都太宽泛）。"
+                )
+            return
+        if action in {"记", "add"}:
+            payload = args[len(parts[0]) :].strip()
+            content, _, keyword_text = payload.partition("|")
+            content = content.strip()
+            if not content:
+                yield event.plain_result(
+                    "要记什么？例如 /涟漪 记 主人说楼下的桂花开了 | 桂花,楼下"
+                )
+                return
+            async with aiosqlite.connect(self.db_path) as db:
+                db.row_factory = aiosqlite.Row
+                memory_id, merged = await self._insert(
+                    db,
+                    umo,
+                    content,
+                    self._clean_keywords(keyword_text) if keyword_text else [],
+                    "manual",
+                    now,
+                )
+                await db.commit()
+            if not memory_id:
+                yield event.plain_result("这件太短了，先不记。")
+                return
+            verb = "并进已有的事" if merged else "记进池子"
+            yield event.plain_result(f"{verb}：r{memory_id}。今天不会触发想起。")
+            return
         if action in {"列表", "list"}:
             band_filter = target if target in BAND_NAMES or target in BAND_NAMES.values() else ""
             reverse = {value: key for key, value in BAND_NAMES.items()}
