@@ -1,0 +1,6 @@
+name: astrbot_plugin_dafeiyu_owner
+display_name: 大肥鱼认主
+author: dafeiyu-tools
+version: 1.0.0
+desc: 部署后用大号私聊 /认主 <QQ> 绑定主人，自动写入插件配置和 AstrBot 管理员列表。
+short_desc: 一条命令绑定主人

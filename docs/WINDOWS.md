@@ -100,6 +100,31 @@ data\INITIAL_CREDENTIALS.txt
 docker compose -f docker-compose.windows.yml restart snowluma
 ```
 
+### 5. 绑定主人
+
+机器人建议用 **QQ 小号** 登录；你的大号用来认主。
+
+1. 用大号加机器人小号为好友
+2. 用大号私聊机器人，发送：
+
+```text
+/认主 你的QQ号
+```
+
+3. 机器人会校验「发送者 QQ」和「填写的 QQ」是否一致
+4. 成功后自动写入插件配置和 AstrBot 管理员列表，并重启一次
+
+认主会写入：
+
+- `data\config\astrbot_plugin_dafeiyu_social_config.json`：`admin_qq`、`admin_umo`
+- `data\config\astrbot_plugin_dafeiyu_ripple_config.json`：`admin_qq`、`admin_umo`
+- `data\config\astrbot_plugin_dafeiyu_memory2_config.json`：`main_umo`
+- `data\config\astrbot_plugin_dafeiyu_heart_config.json`：`main_umo`
+- `data\cmd_config.json`：`admins_id`
+- `data\owner.json`：绑定记录
+
+群里发 `/认主` 会被拒绝；已经绑定后，其他 QQ 不能覆盖。
+
 ## 方案 B：Git Bash
 
 如果已经安装 Git for Windows，也可以用 bash 脚本：
