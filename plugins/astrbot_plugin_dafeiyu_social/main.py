@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import base64
+import hashlib
 import json
 import random
 import re
@@ -11,15 +12,31 @@ import time
 from datetime import datetime, timedelta
 from pathlib import Path
 
+import aiohttp
 import aiosqlite
 
 from astrbot.api import logger
 from astrbot.api.event import AstrMessageEvent, MessageChain, filter
 from astrbot.api.message_components import Face, File, Image, Plain, Record, Video
+from astrbot.api.provider import ProviderRequest
 from astrbot.api.star import Context, Star, StarTools
 
 PLUGIN_NAME = "astrbot_plugin_dafeiyu_social"
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"}
+
+ALBUM_SCHEMA = """
+CREATE TABLE IF NOT EXISTS album (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    umo TEXT NOT NULL,
+    sha256 TEXT NOT NULL UNIQUE,
+    file TEXT NOT NULL,
+    note TEXT NOT NULL DEFAULT '',
+    sender TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    noted_at TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_album_umo ON album(umo, id DESC);
+"""
 
 # Common QQ face IDs. Numeric IDs are always accepted as a fallback.
 FACE_IDS = {
@@ -165,6 +182,10 @@ class DafeiyuSocialPlugin(Star):
         self._sticker_mood_cache: dict[str, tuple[float, str]] = {}
         self._last_sticker_at: dict[str, float] = {}
         self._sticker_history: dict[str, list[str]] = {}
+        self.album_dir = self.data_dir / "album"
+        self.album_db = self.data_dir / "album.db"
+        self._album_ready = False
+        self._album_lock = asyncio.Lock()
 
     # ------------------------------------------------------------------ setup
     @filter.on_astrbot_loaded()
@@ -181,6 +202,244 @@ class DafeiyuSocialPlugin(Star):
                 await self._auto_task
             except asyncio.CancelledError:
                 pass
+
+    # ------------------------------------------------------------------ album
+    async def _ensure_album_db(self) -> None:
+        """Create the album database and directory on first use."""
+        if self._album_ready:
+            return
+        async with self._album_lock:
+            if self._album_ready:
+                return
+            self.album_dir.mkdir(parents=True, exist_ok=True)
+            async with aiosqlite.connect(self.album_db) as db:
+                await db.executescript(ALBUM_SCHEMA)
+                await db.commit()
+            self._album_ready = True
+
+    def _album_path(self, relative: str) -> Path | None:
+        """Resolve a stored album path, refusing anything outside the album dir.
+
+        Args:
+            relative: Path stored in the database, relative to the data dir.
+
+        Returns:
+            Existing file path, or None.
+        """
+        try:
+            path = (self.data_dir / relative).resolve()
+            path.relative_to(self.album_dir.resolve())
+        except (OSError, ValueError):
+            return None
+        return path if path.is_file() else None
+
+    @staticmethod
+    def _guess_extension(source: str, mime: str) -> str:
+        """Guess an image extension from a filename or content type.
+
+        Args:
+            source: Original file path or URL.
+            mime: HTTP content type.
+
+        Returns:
+            Lowercase extension including the dot.
+        """
+        suffix = Path(source.split("?")[0]).suffix.lower()
+        if suffix in IMAGE_EXTENSIONS:
+            return suffix
+        for marker, extension in (
+            ("image/png", ".png"),
+            ("image/gif", ".gif"),
+            ("image/webp", ".webp"),
+            ("image/bmp", ".bmp"),
+            ("image/jpeg", ".jpg"),
+        ):
+            if marker in (mime or ""):
+                return extension
+        return ".jpg"
+
+    async def _fetch_image_bytes(self, comp: Image) -> tuple[bytes, str] | None:
+        """Read image bytes from a local path or an HTTP URL.
+
+        Args:
+            comp: Incoming image component.
+
+        Returns:
+            Tuple of bytes and extension, or None when unusable.
+        """
+        source = str(
+            comp.path or comp.file or comp.url or ""
+        ).strip()
+        if not source:
+            return None
+        limit = int(float(self.cfg.get("album_max_mb", 8) or 8) * 1024 * 1024)
+        if source.startswith("file://"):
+            source = source[7:]
+            if re.match(r"^/[A-Za-z]:", source):
+                source = source[1:]
+        if source.startswith(("http://", "https://")):
+            try:
+                timeout = aiohttp.ClientTimeout(total=15)
+                async with aiohttp.ClientSession(timeout=timeout) as session:
+                    async with session.get(source) as resp:
+                        if resp.status != 200:
+                            return None
+                        data = await resp.content.read(limit + 1)
+                        mime = str(resp.headers.get("Content-Type", ""))
+            except Exception:
+                logger.warning("[social] 相册下载图片失败: %s", source[:120])
+                return None
+            if len(data) > limit:
+                logger.warning("[social] 相册图片超过大小上限，已跳过")
+                return None
+            return data, self._guess_extension(source, mime)
+        path = Path(source)
+        try:
+            if not path.is_file() or path.stat().st_size > limit:
+                return None
+            return path.read_bytes(), self._guess_extension(source, "")
+        except OSError:
+            return None
+
+    async def _save_album_image(self, event: AstrMessageEvent, comp: Image) -> None:
+        """Copy one incoming photo into the album and record it.
+
+        Args:
+            event: Current message event.
+            comp: Incoming image component.
+        """
+        if not bool(self.cfg.get("album_enabled", True)):
+            return
+        if not bool(self.cfg.get("album_save_inbound", True)):
+            return
+        if not self._is_admin(event):
+            return
+        umo = str(getattr(event, "unified_msg_origin", "") or "")
+        if not umo:
+            return
+        fetched = await self._fetch_image_bytes(comp)
+        if fetched is None:
+            return
+        data, extension = fetched
+        digest = hashlib.sha256(data).hexdigest()
+        await self._ensure_album_db()
+        async with aiosqlite.connect(self.album_db) as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                "SELECT id FROM album WHERE sha256 = ?", (digest,)
+            )
+            if await cursor.fetchone():
+                return
+            now = datetime.now().replace(microsecond=0)
+            folder = self.album_dir / now.strftime("%Y%m")
+            folder.mkdir(parents=True, exist_ok=True)
+            path = folder / f"{digest[:16]}{extension}"
+            try:
+                path.write_bytes(data)
+            except OSError:
+                logger.exception("[social] 相册写入图片失败")
+                return
+            relative = str(path.relative_to(self.data_dir)).replace("\\", "/")
+            cursor = await db.execute(
+                "INSERT INTO album (umo, sha256, file, note, sender, created_at) "
+                "VALUES (?, ?, ?, '', ?, ?)",
+                (
+                    umo,
+                    digest,
+                    relative,
+                    str(event.get_sender_id() or ""),
+                    now.isoformat(timespec="seconds"),
+                ),
+            )
+            await db.commit()
+            album_id = int(cursor.lastrowid or 0)
+            await self._trim_album(db)
+        logger.info("[social] 相册收下一张照片 #%s", album_id)
+
+    async def _trim_album(self, db: aiosqlite.Connection) -> None:
+        """Delete the oldest photos beyond the configured album size.
+
+        Args:
+            db: Open album database connection.
+        """
+        try:
+            limit = int(self.cfg.get("album_max_items", 500) or 500)
+        except (TypeError, ValueError):
+            limit = 500
+        limit = max(20, min(limit, 5000))
+        cursor = await db.execute("SELECT COUNT(*) FROM album")
+        total = int((await cursor.fetchone())[0] or 0)
+        if total <= limit:
+            return
+        cursor = await db.execute(
+            "SELECT id, file FROM album ORDER BY id ASC LIMIT ?", (total - limit,)
+        )
+        for row in await cursor.fetchall():
+            path = self._album_path(row["file"])
+            if path is not None:
+                try:
+                    path.unlink()
+                except OSError:
+                    pass
+            await db.execute("DELETE FROM album WHERE id = ?", (row["id"],))
+
+    async def _album_latest(self, umo: str) -> aiosqlite.Row | None:
+        """Return the newest album row for a session.
+
+        Args:
+            umo: Unified message origin.
+
+        Returns:
+            Album row or None.
+        """
+        await self._ensure_album_db()
+        async with aiosqlite.connect(self.album_db) as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                "SELECT * FROM album WHERE umo = ? ORDER BY id DESC LIMIT 1",
+                (umo,),
+            )
+            return await cursor.fetchone()
+
+    async def _album_get(self, umo: str, album_id: int) -> aiosqlite.Row | None:
+        """Return one album row by id.
+
+        Args:
+            umo: Unified message origin.
+            album_id: Album id.
+
+        Returns:
+            Album row or None.
+        """
+        await self._ensure_album_db()
+        async with aiosqlite.connect(self.album_db) as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                "SELECT * FROM album WHERE umo = ? AND id = ?", (umo, album_id)
+            )
+            return await cursor.fetchone()
+
+    @filter.on_llm_request()
+    async def save_incoming_photos(
+        self, event: AstrMessageEvent, req: ProviderRequest
+    ):
+        """Save photos sent by the owner into the album.
+
+        Args:
+            event: Current message event.
+            req: Provider request (unused).
+        """
+        if not bool(self.cfg.get("album_enabled", True)):
+            return
+        if event.get_extra("_album_photos_saved"):
+            return
+        event.set_extra("_album_photos_saved", True)
+        try:
+            for comp in event.get_messages():
+                if isinstance(comp, Image):
+                    await self._save_album_image(event, comp)
+        except Exception:
+            logger.exception("[social] 保存相册照片失败")
 
     # ------------------------------------------------------------------ access
     def _is_admin(self, event: AstrMessageEvent) -> bool:
@@ -1441,3 +1700,256 @@ class DafeiyuSocialPlugin(Star):
             event, content, privacy, images
         )
         return message
+
+    # -------------------------------------------------------------- album commands
+    @filter.command("相册")
+    async def cmd_album(self, event: AstrMessageEvent):
+        """List recent album photos, or send one by id."""
+        if not self._is_admin(event):
+            yield event.plain_result("这个只给主人看。")
+            return
+        if not bool(self.cfg.get("album_enabled", True)):
+            yield event.plain_result("相册功能没开。")
+            return
+        umo = str(getattr(event, "unified_msg_origin", "") or "")
+        args = self._command_args(event, "相册").strip()
+        try:
+            await self._ensure_album_db()
+        except Exception:
+            logger.exception("[social] 打开相册失败")
+            yield event.plain_result("相册一下子没打开。")
+            return
+        match = re.fullmatch(r"#?(\d+)", args)
+        if match:
+            row = await self._album_get(umo, int(match.group(1)))
+            if row is None:
+                yield event.plain_result(f"相册里没有 #{match.group(1)}。")
+                return
+            path = self._album_path(row["file"])
+            if path is None:
+                yield event.plain_result("这张照片的文件找不到了。")
+                return
+            if row["note"]:
+                yield event.chain_result(
+                    [Plain(str(row["note"])), Image.fromFileSystem(str(path))]
+                )
+            else:
+                yield event.chain_result([Image.fromFileSystem(str(path))])
+            return
+        if args:
+            yield event.plain_result("用 /相册 看列表，/相册 3 发第 3 张。")
+            return
+        async with aiosqlite.connect(self.album_db) as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                "SELECT * FROM album WHERE umo = ? ORDER BY id DESC LIMIT 12",
+                (umo,),
+            )
+            rows = await cursor.fetchall()
+        if not rows:
+            yield event.plain_result("相册还是空的，先发我一张照片吧。")
+            return
+        lines = [f"相册（{len(rows)} 张）"]
+        for row in rows:
+            note = str(row["note"] or "").strip() or "（没备注）"
+            lines.append(f"#{row['id']} {str(row['created_at'])[:10]} {note}")
+        lines.append("发 /相册 <编号> 可以把照片要回来。")
+        yield event.plain_result("\n".join(lines))
+
+    @filter.command("相册备注")
+    async def cmd_album_note(self, event: AstrMessageEvent):
+        """Attach a one-line note to the latest photo or a given id."""
+        if not self._is_admin(event):
+            yield event.plain_result("这个只给主人看。")
+            return
+        if not bool(self.cfg.get("album_enabled", True)):
+            yield event.plain_result("相册功能没开。")
+            return
+        umo = str(getattr(event, "unified_msg_origin", "") or "")
+        args = self._command_args(event, "相册备注").strip()
+        if not args:
+            yield event.plain_result("要备注一句什么？例如 /相册备注 那天在江边。")
+            return
+        photo_id = 0
+        note = args
+        match = re.match(r"^#?(\d+)\s+(.+)$", args)
+        if match:
+            photo_id = int(match.group(1))
+            note = match.group(2).strip()
+        max_chars = int(self.cfg.get("album_note_max_chars", 60) or 60)
+        note = note[: max(10, max_chars)]
+        row = (
+            await self._album_get(umo, photo_id)
+            if photo_id
+            else await self._album_latest(umo)
+        )
+        if row is None:
+            yield event.plain_result("相册里没找到这张照片。")
+            return
+        async with aiosqlite.connect(self.album_db) as db:
+            await db.execute(
+                "UPDATE album SET note = ?, noted_at = ? WHERE id = ?",
+                (
+                    note,
+                    datetime.now().replace(microsecond=0).isoformat(timespec="seconds"),
+                    row["id"],
+                ),
+            )
+            await db.commit()
+        yield event.plain_result(f"给 #{row['id']} 备注好了：{note}")
+
+    @filter.command("相册删")
+    async def cmd_album_delete(self, event: AstrMessageEvent):
+        """Delete one album photo by id."""
+        if not self._is_admin(event):
+            yield event.plain_result("这个只给主人看。")
+            return
+        umo = str(getattr(event, "unified_msg_origin", "") or "")
+        args = self._command_args(event, "相册删").strip()
+        match = re.fullmatch(r"#?(\d+)", args)
+        if not match:
+            yield event.plain_result("要删哪张？例如 /相册删 3。")
+            return
+        row = await self._album_get(umo, int(match.group(1)))
+        if row is None:
+            yield event.plain_result("相册里没找到这张照片。")
+            return
+        path = self._album_path(row["file"])
+        if path is not None:
+            try:
+                path.unlink()
+            except OSError:
+                pass
+        async with aiosqlite.connect(self.album_db) as db:
+            await db.execute("DELETE FROM album WHERE id = ?", (row["id"],))
+            await db.commit()
+        yield event.plain_result(f"#{row['id']} 删掉了。")
+
+    @filter.command("相册找")
+    async def cmd_album_search(self, event: AstrMessageEvent):
+        """Search album notes by keyword."""
+        if not self._is_admin(event):
+            yield event.plain_result("这个只给主人看。")
+            return
+        umo = str(getattr(event, "unified_msg_origin", "") or "")
+        query = self._command_args(event, "相册找").strip()
+        if not query:
+            yield event.plain_result("要找什么？例如 /相册找 江边。")
+            return
+        await self._ensure_album_db()
+        async with aiosqlite.connect(self.album_db) as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                "SELECT * FROM album WHERE umo = ? AND note LIKE ? "
+                "ORDER BY id DESC LIMIT 10",
+                (umo, f"%{query}%"),
+            )
+            rows = await cursor.fetchall()
+        if not rows:
+            yield event.plain_result(f"相册里没找到和「{query}」有关的备注。")
+            return
+        lines = [f"找到 {len(rows)} 张："]
+        for row in rows:
+            lines.append(f"#{row['id']} {row['note']}")
+        yield event.plain_result("\n".join(lines))
+
+    @filter.llm_tool(name="dafeiyu_album_note")
+    async def album_note_tool(
+        self,
+        event: AstrMessageEvent,
+        note: str = "",
+        photo_id: str = "",
+    ):
+        """给相册里的照片补一句备注；不填 id 时默认备注最新一张。
+
+        Args:
+            note(string): 一句简短的备注，例如「那天在江边，风很大」。
+            photo_id(string): 可选照片编号，例如 3 或 #3；留空用最新一张。
+        """
+        if not self._is_admin(event) or not bool(
+            self.cfg.get("album_enabled", True)
+        ):
+            return "没有权限或相册未开启。"
+        text = str(note or "").strip()
+        if not text:
+            return "备注是空的。"
+        max_chars = int(self.cfg.get("album_note_max_chars", 60) or 60)
+        text = text[: max(10, max_chars)]
+        umo = str(getattr(event, "unified_msg_origin", "") or "")
+        match = re.search(r"\d+", str(photo_id or ""))
+        row = (
+            await self._album_get(umo, int(match.group(0)))
+            if match
+            else await self._album_latest(umo)
+        )
+        if row is None:
+            return "相册里还没照片。"
+        async with aiosqlite.connect(self.album_db) as db:
+            await db.execute(
+                "UPDATE album SET note = ?, noted_at = ? WHERE id = ?",
+                (
+                    text,
+                    datetime.now().replace(microsecond=0).isoformat(timespec="seconds"),
+                    row["id"],
+                ),
+            )
+            await db.commit()
+        return f"给 #{row['id']} 备注好了。"
+
+    @filter.llm_tool(name="dafeiyu_album_search")
+    async def album_search_tool(
+        self, event: AstrMessageEvent, keyword: str = "", limit: int = 5
+    ):
+        """按备注关键词翻相册，返回照片编号和备注。
+
+        Args:
+            keyword(string): 要搜的词，例如「江边」。
+            limit(int): 最多返回几条，默认 5。
+        """
+        if not self._is_admin(event) or not bool(
+            self.cfg.get("album_enabled", True)
+        ):
+            return "没有权限或相册未开启。"
+        query = str(keyword or "").strip()
+        if not query:
+            return "要搜什么？"
+        use_limit = max(1, min(int(limit or 5), 20))
+        umo = str(getattr(event, "unified_msg_origin", "") or "")
+        await self._ensure_album_db()
+        async with aiosqlite.connect(self.album_db) as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                "SELECT * FROM album WHERE umo = ? AND note LIKE ? "
+                "ORDER BY id DESC LIMIT ?",
+                (umo, f"%{query}%", use_limit),
+            )
+            rows = await cursor.fetchall()
+        if not rows:
+            return f"相册里没翻到「{query}」。"
+        lines = [f"#{row['id']} {row['note']}" for row in rows]
+        return "翻到这些：\n" + "\n".join(lines)
+
+    @filter.llm_tool(name="dafeiyu_album_send")
+    async def album_send_tool(self, event: AstrMessageEvent, photo_id: str = ""):
+        """把相册里的一张照片发回给主人。
+
+        Args:
+            photo_id(string): 照片编号，例如 3 或 #3。
+        """
+        if not self._is_admin(event) or not bool(
+            self.cfg.get("album_enabled", True)
+        ):
+            return "没有权限或相册未开启。"
+        match = re.search(r"\d+", str(photo_id or ""))
+        if not match:
+            return "要发哪一张？给我一个编号。"
+        umo = str(getattr(event, "unified_msg_origin", "") or "")
+        row = await self._album_get(umo, int(match.group(0)))
+        if row is None:
+            return "相册里没这张。"
+        path = self._album_path(row["file"])
+        if path is None:
+            return "照片文件找不到了。"
+        await event.send(MessageChain([Image.fromFileSystem(str(path))]))
+        return f"把 #{row['id']} 发给主人了。"
+

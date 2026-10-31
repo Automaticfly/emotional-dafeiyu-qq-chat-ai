@@ -94,6 +94,36 @@ ollama pull bge-m3
 - 自动动态读取前一天 LivingMemory 重要度 ≥ `qzone_auto_min_importance` 的内容
 - 隐私过滤命中即跳过
 - 默认不允许群聊使用；需要时自行改 `allow_groups`
+- 相册默认开启：`album_enabled`、`album_save_inbound`、`album_max_mb`、
+  `album_max_items`、`album_note_max_chars`
+
+### 涟漪记忆
+
+`astrbot_plugin_dafeiyu_ripple` 的默认参数已经按大肥鱼调过，通常只需要填管理员：
+
+```json
+{
+  "admin_qq": "你的大号QQ",
+  "admin_umo": "napcat:FriendMessage:你的大号QQ",
+  "base_scale_days": 1.8,
+  "recall_min_overlap": 4,
+  "revive_min_overlap": 4,
+  "recall_cooldown_minutes": 90,
+  "special_keywords": ""
+}
+```
+
+- `base_scale_days`：越小忘得越快；日常碎事建议 1.2-2.5
+- `fresh_retention` / `mid_retention`：新鲜区和沉底区的边界
+- `recall_min_overlap`：重复几个字会想起，默认 4
+- `revive_min_overlap`：重复几个字能把沉底勾回中部，默认 4，想更严格改成 6
+- `recall_cooldown_minutes`：同一会话想起冷却，默认 90 分钟
+- `special_keywords`：特殊触发词，例如 `火锅,猫,考试`；命中后会尝试想起或勾回
+- `blocklist`：留空使用内置空词表（就是、今天、早上、吃饭等）；填了就完全替换
+- `embedding_enabled`：有 embedding provider 时用向量判断「意思相近」，没有就自动退回字面匹配
+- 自动摘录默认在 03:00-06:00，每天最多 3 条
+
+完整说明见 `plugins/astrbot_plugin_dafeiyu_ripple/README.md`。
 
 ### 心脏 / 记忆 2.0
 
@@ -168,10 +198,13 @@ data/cmd_config.json
 data/data_v4.db*
 data/config/
 data/plugin_data/
+data/plugin_data/astrbot_plugin_dafeiyu_ripple/ripple.db
+data/plugin_data/astrbot_plugin_dafeiyu_social/album.db
+data/plugin_data/astrbot_plugin_dafeiyu_social/album/
 data/logs/
 data/snowluma/
 data/snowluma-qq-config/
 data/snowluma-qq-data/
 ```
 
-这些文件包含密钥、聊天记录、记忆、日记、画像、登录态和二维码。
+这些文件包含密钥、聊天记录、记忆、日记、画像、涟漪池、相册、登录态和二维码。

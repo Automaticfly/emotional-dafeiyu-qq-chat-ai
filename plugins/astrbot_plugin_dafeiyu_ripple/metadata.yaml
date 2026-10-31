@@ -1,0 +1,6 @@
+name: astrbot_plugin_dafeiyu_ripple
+display_name: 大肥鱼涟漪记忆
+author: dafeiyu-tools
+version: 1.0.0
+desc: 像日常琐事一样会变淡的记忆池：按遗忘曲线衰减，沉到中部才会被关键词勾起，沉底后重新被提到才会回到中部。
+short_desc: 会衰减、会变糊的日常小事记忆池

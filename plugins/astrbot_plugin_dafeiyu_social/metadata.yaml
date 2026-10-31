@@ -1,6 +1,6 @@
 name: astrbot_plugin_dafeiyu_social
 display_name: 大肥鱼社交与媒体
 author: dafeiyu-tools
-version: 1.0.0
-desc: QQ空间动态、图片、QQ表情与表情包发送
+version: 1.1.0
+desc: QQ空间动态、图片、QQ表情、表情包与相册
 short_desc: 让大肥鱼会发动态和发表情

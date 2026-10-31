@@ -48,6 +48,18 @@
 - 短期日程表
 - 定时结算窗口
 
+### 涟漪记忆
+
+- 像日常琐事一样会变淡的记忆池
+- 按类似艾宾浩斯曲线衰减：新鲜 → 中部 → 沉底
+- 只有落在曲线中部的小事，被关键词或重复 4 个字撞见时才会被模糊地想起
+- 沉底的小事被重新提到（重复字数够或语义相近）会勾回中部，下一次才有机会想起
+- 想起时自动模糊时间、数字和细节，只保留「前两天 / 前阵子 / 好久以前」的印象
+- 当天入池的事当天不触发
+- 同一会话 90 分钟冷却，避免一直翻旧账
+- 内置一整套屏蔽词（就是、今天、早上、吃饭等），也支持自定义特殊触发词
+- 深夜自动摘录，也可以让她在聊天中自己记一件小事
+
 ### 心脏模块
 
 - 关系认知
@@ -64,6 +76,14 @@
 - 自动表情包：30% 触发，单次最多 2 条，永不连续 3 条
 - 自动原生表情：约 50% 触发，其中一半跟随最后一段文字，一半独立发送
 - 表情包/表情/图片独立成消息，不塞进文字气泡
+
+### 相册
+
+- 主人发来的照片自动收进相册
+- 每张照片可以顺手补一句备注
+- 按备注关键词翻找照片
+- 可以让她把某张照片再发回来
+- 按会话隔离，群友发图不会自动入库
 
 ### QQ 空间动态
 
@@ -131,6 +151,7 @@ flowchart LR
 ├── plugins/
 │   ├── astrbot_plugin_dafeiyu_heart/
 │   ├── astrbot_plugin_dafeiyu_memory2/
+│   ├── astrbot_plugin_dafeiyu_ripple/
 │   ├── astrbot_plugin_dafeiyu_context/
 │   ├── astrbot_plugin_dafeiyu_social/
 │   ├── astrbot_plugin_dafeiyu_moodface/
@@ -141,6 +162,7 @@ flowchart LR
 ├── config/
 │   ├── snowluma-onebot.example.json
 │   ├── social.example.json
+│   ├── ripple.example.json
 │   └── CONFIGURATION.md
 ├── assets/stickers/dafeiyu/      # 100 张 GIF 及分类目录
 └── scripts/
@@ -203,6 +225,10 @@ http://host.docker.internal:11434
 /日记2         查看日记
 /画像          查看主人画像
 /日程          查看日程
+/涟漪          查看涟漪池状态
+/涟漪 列表     查看池子里的小事
+/相册          查看相册和备注
+/相册备注      给最新一张照片加一句备注
 /上下文        查看最近上下文
 /发图          发送图片
 /表情          发送 QQ 原生表情
@@ -226,7 +252,8 @@ http://host.docker.internal:11434
 - DeepSeek / 火山引擎 / 其他 API Key
 - QQ 号、管理员账号、UMO、token
 - `data_v4.db`、聊天记录、LivingMemory 数据库
-- `plugin_data`、日记、画像、日程、心绪手札
+- `plugin_data`、日记、画像、日程、心绪手札、涟漪池
+- 相册照片和照片备注
 - 登录二维码、语音样本、日志、截图
 - 个人服务器 IP、SSH 密钥、密码
 

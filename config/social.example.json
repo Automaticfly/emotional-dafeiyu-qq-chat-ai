@@ -33,5 +33,10 @@
   "sticker_catalog_file": "catalog.json",
   "mood_cache_seconds": 60,
   "image_dir": "images",
-  "sticker_dir": "stickers"
+  "sticker_dir": "stickers",
+  "album_enabled": true,
+  "album_save_inbound": true,
+  "album_max_mb": 8,
+  "album_max_items": 500,
+  "album_note_max_chars": 60
 }

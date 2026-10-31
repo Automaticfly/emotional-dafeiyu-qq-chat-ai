@@ -10,6 +10,8 @@
 - `data_v4.db`、聊天记录、会话历史
 - LivingMemory 数据库、记忆向量、反思记录
 - `plugin_data` 中的心脏、日记、画像、日程
+- 涟漪池数据库和其中摘录的日常碎事
+- 相册照片、照片备注和图片索引
 - 插件实际配置（可能包含 QQ 号/UMO）
 - 登录二维码、截图、语音样本、试听音频
 - 服务器 IP、SSH 私钥、面板密码、VNC 密码
@@ -30,6 +32,9 @@ data/cmd_config.json
 data/data_v4.db
 data/config/
 data/plugin_data/
+data/plugin_data/astrbot_plugin_dafeiyu_ripple/ripple.db
+data/plugin_data/astrbot_plugin_dafeiyu_social/album.db
+data/plugin_data/astrbot_plugin_dafeiyu_social/album/
 data/logs/
 data/snowluma/
 data/snowluma-qq-config/

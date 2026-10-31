@@ -1,0 +1,182 @@
+{
+  "enabled": {
+    "description": "启用涟漪记忆",
+    "hint": "关闭后不摘录、不注入、不响应命令，已有数据仍保留。",
+    "type": "bool",
+    "default": true
+  },
+  "admin_qq": {
+    "description": "管理员 QQ",
+    "hint": "只有这个号能用 /涟漪 管理命令；留空则不做限制。",
+    "type": "string",
+    "default": ""
+  },
+  "admin_umo": {
+    "description": "管理员会话 UMO",
+    "hint": "例如 napcat:FriendMessage:你的大号QQ；留空则只按 QQ 号判断。",
+    "type": "string",
+    "default": ""
+  },
+  "recall_enabled": {
+    "description": "启用聊天中想起",
+    "hint": "关闭后只摘录，不会在对话里主动提起旧事。",
+    "type": "bool",
+    "default": true
+  },
+  "extract_enabled": {
+    "description": "启用深夜自动摘录",
+    "hint": "每天在时间窗内读取最近 24 小时聊天，挑几件小事放进池子。",
+    "type": "bool",
+    "default": true
+  },
+  "extract_start_hour": {
+    "description": "摘录开始小时",
+    "hint": "24 小时制，默认 3 点。",
+    "type": "int",
+    "default": 3
+  },
+  "extract_end_hour": {
+    "description": "摘录结束小时",
+    "hint": "24 小时制，默认 6 点；到点后当天不再摘录。",
+    "type": "int",
+    "default": 6
+  },
+  "extract_interval_seconds": {
+    "description": "摘录轮询间隔（秒）",
+    "hint": "失败后每隔这么久重试一次，默认 600 秒。",
+    "type": "int",
+    "default": 600
+  },
+  "max_umo_per_extract": {
+    "description": "单轮最多摘录会话数",
+    "hint": "按消息量取最活跃的几个会话，默认 5。",
+    "type": "int",
+    "default": 5
+  },
+  "max_items_per_extract": {
+    "description": "每天每会话最多入池条数",
+    "hint": "默认 3 条；涟漪池只收碎事，不贪多。",
+    "type": "int",
+    "default": 3
+  },
+  "max_transcript_chars": {
+    "description": "摘录读取的最大聊天字数",
+    "hint": "超出后只取最近的部分，默认 8000。",
+    "type": "int",
+    "default": 8000
+  },
+  "base_scale_days": {
+    "description": "初始记忆尺度（天）",
+    "hint": "曲线用 exp(-经过天数/尺度) 计算。1.8 表示约 1 天进入中部、约 3 天沉底，适合日常碎事。",
+    "type": "float",
+    "default": 1.8
+  },
+  "max_scale_days": {
+    "description": "记忆尺度上限（天）",
+    "hint": "每想起一次会加强，最多强化到这个尺度，默认 10 天。",
+    "type": "float",
+    "default": 10.0
+  },
+  "fresh_retention": {
+    "description": "新鲜区阈值",
+    "hint": "保留度高于这个值时太新鲜，不会主动想起，默认 0.62。",
+    "type": "float",
+    "default": 0.62
+  },
+  "mid_retention": {
+    "description": "沉底阈值",
+    "hint": "保留度低于这个值时算沉底，需要重新被提到才能勾回中部，默认 0.16。",
+    "type": "float",
+    "default": 0.16
+  },
+  "revive_target_retention": {
+    "description": "勾回后的保留度",
+    "hint": "沉底记忆被重新提到后放回曲线这个位置，默认 0.45，正好在中部。",
+    "type": "float",
+    "default": 0.45
+  },
+  "recall_boost": {
+    "description": "想起后的加强倍数",
+    "hint": "每想起一次，记忆尺度乘以这个值，默认 1.75（间隔重复效应）。",
+    "type": "float",
+    "default": 1.75
+  },
+  "recall_cooldown_minutes": {
+    "description": "想起冷却（分钟）",
+    "hint": "同一会话两次想起之间至少隔这么久，默认 90 分钟，避免一直翻旧账。",
+    "type": "int",
+    "default": 90
+  },
+  "recall_min_overlap": {
+    "description": "触发想起的重复字数",
+    "hint": "消息和旧事连续重复这么多字才会想起，默认 4 个字。",
+    "type": "int",
+    "default": 4
+  },
+  "revive_min_overlap": {
+    "description": "勾回中部的重复字数",
+    "hint": "沉底记忆需要连续重复这么多字才勾回，默认 4 个字；想更严格可以改成 6。",
+    "type": "int",
+    "default": 4
+  },
+  "recall_similarity": {
+    "description": "想起的字面相似度",
+    "hint": "没有关键词命中时，字面覆盖率达到这个值也能想起，默认 0.8。",
+    "type": "float",
+    "default": 0.8
+  },
+  "revive_similarity": {
+    "description": "勾回中部的要求相似度",
+    "hint": "判断是不是同一件事的阈值，默认 0.8；有向量模型时会用语义相似度。",
+    "type": "float",
+    "default": 0.8
+  },
+  "max_revive_per_turn": {
+    "description": "单轮最多勾回几条",
+    "hint": "一次消息最多把几条沉底记忆勾回中部，默认 2。",
+    "type": "int",
+    "default": 2
+  },
+  "min_message_chars": {
+    "description": "触发想起的最短消息字数",
+    "hint": "太短的消息（嗯、好、哈哈）不参与匹配，默认 4。",
+    "type": "int",
+    "default": 4
+  },
+  "content_max_chars": {
+    "description": "单条涟漪最大字数",
+    "hint": "超过会被截断，默认 60 字。",
+    "type": "int",
+    "default": 60
+  },
+  "keywords_max": {
+    "description": "单条最多关键词数",
+    "hint": "默认 4 个；关键词越具体越不容易误触发。",
+    "type": "int",
+    "default": 4
+  },
+  "pool_limit": {
+    "description": "每个会话的池子上限",
+    "hint": "超过后最旧的记忆会被归档，默认 400 条。",
+    "type": "int",
+    "default": 400
+  },
+  "embedding_enabled": {
+    "description": "使用向量模型判断意思相近",
+    "hint": "开启后会调用 AstrBot 已配置的 embedding 模型（如 bge-m3）；没有配置时自动退回字面匹配。",
+    "type": "bool",
+    "default": true
+  },
+  "special_keywords": {
+    "description": "特殊触发词",
+    "hint": "用逗号分隔。消息里出现这些词时，即使重复字数不够也会尝试想起或勾回，例如：火锅,猫,考试。留空则不启用。",
+    "type": "string",
+    "default": ""
+  },
+  "blocklist": {
+    "description": "屏蔽词",
+    "hint": "用逗号分隔。这些词不会被存成关键词、也不会单独触发想起。留空使用内置的一整套空词表（就是、今天、早上、吃饭等）。",
+    "type": "string",
+    "default": ""
+  }
+}

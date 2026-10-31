@@ -189,5 +189,35 @@
     "description": "表情包素材目录（相对插件数据目录）",
     "type": "string",
     "default": "stickers"
+  },
+  "album_enabled": {
+    "description": "启用相册",
+    "hint": "开启后会保存主人发来的照片，并允许用 /相册 查看和取回。",
+    "type": "bool",
+    "default": true
+  },
+  "album_save_inbound": {
+    "description": "自动保存主人发来的照片",
+    "hint": "只保存管理员私聊里的图片；群友发图不会收进相册。",
+    "type": "bool",
+    "default": true
+  },
+  "album_max_mb": {
+    "description": "单张照片大小上限（MB）",
+    "hint": "超过这个大小的图片会被跳过，默认 8MB。",
+    "type": "int",
+    "default": 8
+  },
+  "album_max_items": {
+    "description": "相册最多保留张数",
+    "hint": "超出后删除最旧的照片，默认 500 张。",
+    "type": "int",
+    "default": 500
+  },
+  "album_note_max_chars": {
+    "description": "照片备注最大字数",
+    "hint": "默认 60 字，一句话就够。",
+    "type": "int",
+    "default": 60
   }
 }
