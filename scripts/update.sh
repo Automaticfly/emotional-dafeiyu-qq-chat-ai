@@ -218,14 +218,18 @@ else
 
     replace_path() {
         local rel="$1"
+        local src_rel="${2:-$1}"
         case "$rel" in
             /* | *..*) die "非法路径：$rel" ;;
         esac
-        [ -e "$SRC/$rel" ] || return 0
+        case "$src_rel" in
+            /* | *..*) die "非法源路径：$src_rel" ;;
+        esac
+        [ -e "$SRC/$src_rel" ] || return 0
         backup_item "$rel"
         rm -rf -- "$ROOT/$rel"
         mkdir -p "$(dirname "$ROOT/$rel")"
-        cp -a "$SRC/$rel" "$ROOT/$rel"
+        cp -a "$SRC/$src_rel" "$ROOT/$rel"
         log "更新 $rel"
     }
 
@@ -273,7 +277,7 @@ else
     fi
     for dir in "$SRC"/plugins/*/; do
         name="$(basename "$dir")"
-        replace_path "$PLUGIN_REL/$name"
+        replace_path "$PLUGIN_REL/$name" "plugins/$name"
     done
     log "插件目录：$PLUGIN_REL"
 
