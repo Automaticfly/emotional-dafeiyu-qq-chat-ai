@@ -56,3 +56,9 @@ Thumbs.db
 downloads/
 *.zip
 *.tar.gz
+
+# Update and uninstall artifacts
+backups/
+update.log
+.last_update_sha
+scripts/*.new

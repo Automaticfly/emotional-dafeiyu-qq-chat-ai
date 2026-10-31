@@ -213,6 +213,44 @@ http://host.docker.internal:11434
 
 具体配置见 [CONFIGURATION.md](config/CONFIGURATION.md)。
 
+## 安装、更新与卸载
+
+### 安装
+
+```bash
+cp .env.example .env
+# 修改 .env 中的 VNC 密码
+bash scripts/install.sh
+```
+
+### 更新
+
+```bash
+bash scripts/update.sh          # 同步 GitHub 最新代码并重启
+bash scripts/update.sh --check  # 只看有没有新版本
+```
+
+- `git clone` 的部署：`git fetch` + 快进合并
+- 下载 zip 的部署：从 GitHub 拉取压缩包，只替换代码和插件
+- 始终保留 `data/` 和 `.env`
+- 旧文件备份到 `backups/update-<时间>/`
+
+每天自动同步：
+
+```cron
+30 4 * * * cd /opt/astrbot && bash scripts/update.sh --auto >> update.log 2>&1
+```
+
+### 卸载
+
+```bash
+bash scripts/uninstall.sh              # 停容器，保留 data/ 和 .env
+bash scripts/uninstall.sh --purge      # 连 data/、.env 一起删除
+bash scripts/uninstall.sh --remove-images
+```
+
+完整选项、cron/systemd 示例和排查方法见 [scripts/README.md](scripts/README.md)。
+
 ## 命令
 
 完整命令见 [COMMANDS.md](COMMANDS.md)。常用命令：

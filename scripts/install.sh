@@ -42,3 +42,6 @@ echo "SnowLuma WebUI: http://127.0.0.1:5099"
 echo "noVNC:          http://127.0.0.1:6081/vnc.html?autoconnect=1"
 echo
 echo "首次运行请在 AstrBot WebUI 完成 Provider、平台、插件和人格配置。"
+echo
+echo "更新：bash scripts/update.sh"
+echo "卸载：bash scripts/uninstall.sh"
