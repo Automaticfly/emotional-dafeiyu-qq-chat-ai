@@ -259,7 +259,7 @@ else
     for rel in \
         Dockerfile.astrbot .dockerignore .gitattributes .gitignore \
         README.md ARCHITECTURE.md COMMANDS.md CHANGELOG.md DISCLAIMER.md \
-        LICENSE PRIVACY.md THIRD_PARTY_NOTICES.md; do
+        LICENSE PRIVACY.md THIRD_PARTY_NOTICES.md RELEASING.md; do
         replace_path "$rel"
     done
 
