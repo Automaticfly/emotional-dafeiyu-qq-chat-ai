@@ -51,8 +51,22 @@ data/INITIAL_CREDENTIALS.txt
 /认主 你的QQ号
 ```
 
-会自动写入 `social` / `ripple` / `memory2` / `heart` 的主人配置和 AstrBot 的
-`admins_id`，然后重启一次。群里发会被拒绝，已绑定后其他 QQ 不能覆盖。
+然后设置换主密码：
+
+```text
+/认主 密码 你的密码
+```
+
+密码要求 8-64 位，至少包含一个字母和一个数字。
+
+以后换主，用新 QQ 本人私聊：
+
+```text
+/认主 更换 新QQ 换主密码
+```
+
+会自动清除旧 QQ 的管理员权限，写入 `social` / `ripple` / `memory2` / `heart`
+的配置和 AstrBot 的 `admins_id`，然后重启一次。
 
 详见 [plugins/astrbot_plugin_dafeiyu_owner/README.md](../plugins/astrbot_plugin_dafeiyu_owner/README.md)。
 
