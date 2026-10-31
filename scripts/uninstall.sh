@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-# Uninstall the Dafeiyu deployment.
+# 大肥鱼 QQ 机器人 · 卸载脚本
 #
-# Default: stop and remove the containers, keep data/ and .env.
-# --purge: also delete data/ and .env (chat history, memory, album, login state).
+# 默认：停止并删除容器，保留 data/ 和 .env。
+# --purge：连 data/、.env 一起删除（聊天记录、记忆、相册、登录态）。
+# --remove-images：同时删除项目镜像。
+#
+# 如果提示权限不足，请用 sudo 重新运行，或把用户加入 docker 组。
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -74,7 +77,10 @@ if [ "$ASSUME_YES" != 1 ]; then
 fi
 
 if command -v docker >/dev/null 2>&1; then
-    if docker compose version >/dev/null 2>&1; then
+    if ! docker info >/dev/null 2>&1; then
+        echo "提示：当前用户无权访问 Docker，跳过容器清理。"
+        echo "如需清理容器，请用 sudo 重新运行：sudo bash scripts/uninstall.sh"
+    elif docker compose version >/dev/null 2>&1; then
         docker compose down --remove-orphans || true
     elif command -v docker-compose >/dev/null 2>&1; then
         docker-compose down --remove-orphans || true
@@ -92,6 +98,11 @@ if [ "$REMOVE_IMAGES" = 1 ] && command -v docker >/dev/null 2>&1; then
 fi
 
 if [ "$PURGE" = 1 ]; then
+    if [ ! -w "$ROOT" ]; then
+        echo "错误：当前目录没有写权限，无法删除 data/ 和 .env。" >&2
+        echo "请用 sudo 重新运行：sudo bash scripts/uninstall.sh --purge" >&2
+        exit 1
+    fi
     rm -rf -- "$ROOT/data"
     rm -f -- "$ROOT/.env" "$ROOT/update.log" "$ROOT/.last_update_sha"
     echo "已删除 data/、.env 和更新记录。"

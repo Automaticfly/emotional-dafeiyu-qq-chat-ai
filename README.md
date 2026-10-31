@@ -9,7 +9,7 @@
 >
 > 详细声明见 [DISCLAIMER.md](DISCLAIMER.md)。
 
-**当前版本：v1.0.0** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
+**当前版本：v1.1.0** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
 
 一只住在 QQ 里的蓝色鲸鱼娘。她可以聊天、发语音、发表情包、记住重要的事，
 也可以在 QQ 空间写一条不泄露隐私的日常动态。
@@ -181,10 +181,11 @@ flowchart LR
 ### 2. 启动
 
 ```bash
-cp .env.example .env
-# 修改 .env 中的 VNC 密码
 bash scripts/install.sh
 ```
+
+安装脚本会自动生成 `.env`、创建数据目录、构建并启动容器，并把初始账号密码保存到
+`data/INITIAL_CREDENTIALS.txt`。权限不足时用 `sudo bash scripts/install.sh`。
 
 首次启动后：
 
@@ -220,9 +221,46 @@ http://host.docker.internal:11434
 ### 安装
 
 ```bash
-cp .env.example .env
-# 修改 .env 中的 VNC 密码
 bash scripts/install.sh
+```
+
+安装脚本会自动：
+
+1. 检查 Docker 和目录权限
+2. 创建 `data/` 目录
+3. 生成 `.env`；如果没改 VNC 占位密码，会自动生成一个随机密码
+4. 复制表情包素材和 SnowLuma OneBot 配置
+5. 构建并启动 AstrBot + SnowLuma
+6. 把初始账号密码保存到 `data/INITIAL_CREDENTIALS.txt`
+
+初始账号密码：
+
+```text
+AstrBot    用户名 astrbot，密码随机生成
+SnowLuma   用户名 admin，密码随机生成
+noVNC      密码在 .env 的 VNC_PASSWORD
+```
+
+三个密码都会写进 `data/INITIAL_CREDENTIALS.txt`（权限 600）。登录后请立即修改密码并删除该文件。
+
+如果出现权限问题：
+
+```text
+permission denied
+Cannot connect to the Docker daemon
+```
+
+用 sudo 重新运行：
+
+```bash
+sudo bash scripts/install.sh
+```
+
+或者把用户加入 docker 组：
+
+```bash
+sudo usermod -aG docker $USER
+newgrp docker
 ```
 
 ### 更新
@@ -236,6 +274,8 @@ bash scripts/update.sh --check  # 只看有没有新版本
 - 下载 zip 的部署：从 GitHub 拉取压缩包，只替换代码和插件
 - 始终保留 `data/` 和 `.env`
 - 旧文件备份到 `backups/update-<时间>/`
+
+更新时如果提示权限不足，同样用 `sudo bash scripts/update.sh`，或先加入 docker 组。
 
 每天自动同步：
 
@@ -296,6 +336,7 @@ bash scripts/uninstall.sh --remove-images
 - `data_v4.db`、聊天记录、LivingMemory 数据库
 - `plugin_data`、日记、画像、日程、心绪手札、涟漪池
 - 相册照片和照片备注
+- `data/INITIAL_CREDENTIALS.txt`（初始账号密码）
 - 登录二维码、语音样本、日志、截图
 - 个人服务器 IP、SSH 密钥、密码
 

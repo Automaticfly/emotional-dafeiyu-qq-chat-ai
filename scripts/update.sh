@@ -1,14 +1,23 @@
 #!/usr/bin/env bash
-# Update the Dafeiyu deployment from the public GitHub repository.
+# 大肥鱼 QQ 机器人 · 更新脚本
 #
-# - git clone deployments: fast-forward the current branch.
-# - zip/tarball deployments: download the latest archive and replace code only.
+# 从 GitHub 同步最新代码：
+#   - git clone 的目录：git fetch + 快进合并
+#   - 下载 zip 的目录：下载最新压缩包，只替换代码和插件
+# 始终保留 data/ 和 .env。
 #
-# Runtime data (data/, .env) is never touched by this script.
+# 如果提示权限不足，请用 sudo 重新运行，或把用户加入 docker 组。
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 ROOT="$(pwd)"
+
+# 目录不可写时无法替换代码，提前提示 sudo。
+if [ ! -w "$ROOT" ]; then
+    echo "错误：当前目录没有写权限：$ROOT" >&2
+    echo "请用 sudo 重新运行：sudo bash scripts/update.sh" >&2
+    exit 1
+fi
 
 REPO="Automaticfly/emotional-dafeiyu-qq-chat-ai"
 BRANCH="${UPDATE_BRANCH:-main}"
@@ -132,6 +141,7 @@ fi
 
 if [ "$NO_RESTART" = 0 ] && [ "$CHECK_ONLY" = 0 ]; then
     command -v docker >/dev/null 2>&1 || die "没有找到 docker，无法重建和重启"
+    docker info >/dev/null 2>&1 || die "当前用户无权访问 Docker。请用 sudo 重新运行，或执行 sudo usermod -aG docker \$USER 后重新登录"
 fi
 
 if [ "$CHECK_ONLY" = 0 ] && [ "$NO_RESTART" = 0 ]; then

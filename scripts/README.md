@@ -4,9 +4,69 @@
 
 | 脚本 | 作用 |
 |---|---|
-| `install.sh` | 首次安装：生成 `.env`、OneBot 示例、构建并启动容器 |
+| `install.sh` | 首次安装：检查权限、生成配置、构建启动、保存初始账号密码 |
 | `update.sh` | 从 GitHub 同步最新代码，重建并重启容器 |
 | `uninstall.sh` | 停止并删除容器，可选删除数据 |
+
+## 安装
+
+```bash
+bash scripts/install.sh
+```
+
+安装过程会分步显示中文提示：
+
+1. 创建 `data/` 目录
+2. 生成 `.env`（没改 VNC 占位密码时会自动生成随机密码）
+3. 生成 SnowLuma OneBot 配置
+4. 构建镜像
+5. 启动容器
+6. 等待面板启动，收集初始账号密码
+
+### 初始账号密码
+
+安装完成后会自动生成：
+
+```text
+data/INITIAL_CREDENTIALS.txt
+```
+
+里面包含：
+
+- AstrBot 面板地址、用户名、初始密码
+- SnowLuma 面板地址、用户名、初始密码
+- noVNC 地址和密码
+- 忘记密码时的重置命令
+- 服务器部署的 SSH 隧道命令
+
+文件权限是 `600`，只有当前用户能读。登录后请立即修改两个面板的密码，并删除这个文件。
+
+如果日志里没抓到密码（例如已经改过密码），文件里会写「未捕获」，并给出查看日志和重置的方法。
+
+### 权限问题
+
+如果出现：
+
+```text
+permission denied
+Cannot connect to the Docker daemon
+mkdir: cannot create directory
+```
+
+用 sudo 重新运行：
+
+```bash
+sudo bash scripts/install.sh
+```
+
+或者把当前用户加入 docker 组（推荐，之后不用 sudo）：
+
+```bash
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+用 sudo 安装时，脚本会把 `data/` 和 `.env` 的所有权交还给 `SUDO_USER`，避免之后更新或删除时再次遇到权限问题。
 
 ## 更新
 
@@ -21,8 +81,10 @@ bash scripts/update.sh
 
 两种方式都会保留：
 
-- `data/`：聊天记录、记忆、涟漪池、相册、登录态
+- `data/`：聊天记录、记忆、涟漪池、相册、登录态、初始密码文件
 - `.env`：VNC 密码等本地配置
+
+更新时如果提示权限不足，用 `sudo bash scripts/update.sh`，或先把用户加入 docker 组。
 
 ### 常用选项
 
