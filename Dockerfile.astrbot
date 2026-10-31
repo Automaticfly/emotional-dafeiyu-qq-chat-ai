@@ -1,0 +1,7 @@
+FROM soulter/astrbot:latest
+
+RUN python -m pip install --no-cache-dir -i https://mirrors.aliyun.com/pypi/simple/ networkx pytz jieba aiofiles aiosqlite
+
+COPY patches/volcengine_tts.py /AstrBot/astrbot/core/provider/sources/volcengine_tts.py
+COPY patches/session_llm_manager.py /AstrBot/astrbot/core/star/session_llm_manager.py
+COPY patches/respond_stage.py /AstrBot/astrbot/core/pipeline/respond/stage.py

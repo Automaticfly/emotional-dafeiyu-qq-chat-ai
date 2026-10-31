@@ -1,0 +1,70 @@
+name: dafeiyu-bot
+
+services:
+  astrbot:
+    build:
+      context: .
+      dockerfile: Dockerfile.astrbot
+    image: dafeiyu-astrbot:latest
+    container_name: astrbot
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6185:6185"
+    volumes:
+      - ./data:/AstrBot/data
+      - ./plugins:/AstrBot/data/plugins
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    environment:
+      - TZ=Asia/Shanghai
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "3"
+    networks:
+      - dafeiyu
+
+  snowluma:
+    image: motricseven7/snowluma:latest
+    container_name: snowluma
+    restart: unless-stopped
+    shm_size: "1gb"
+    security_opt:
+      - seccomp:unconfined
+    cap_add:
+      - SYS_PTRACE
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 1048576
+    ports:
+      - "127.0.0.1:5099:5099"
+      - "127.0.0.1:6081:6081"
+    environment:
+      - TZ=Asia/Shanghai
+      - VNC_PASSWD=${VNC_PASSWORD:-}
+      - SNOWLUMA_LOG_LEVEL=warn
+      - SNOWLUMA_SCREEN=1280x720x24
+      - SNOWLUMA_ONEBOT_HOST=0.0.0.0
+      - SNOWLUMA_WEBUI_HOST=0.0.0.0
+      - SNOWLUMA_QQ_FLAGS=--disable-gpu --disable-software-rasterizer --disable-gpu-compositing
+    volumes:
+      - ./data/snowluma:/app/data
+      - ./data/snowluma-qq-config:/app/.config
+      - ./data/snowluma-qq-data:/app/.local/share
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "3"
+    depends_on:
+      - astrbot
+    networks:
+      - dafeiyu
+
+networks:
+  dafeiyu:
+    driver: bridge

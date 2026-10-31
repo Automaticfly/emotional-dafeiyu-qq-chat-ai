@@ -1,0 +1,193 @@
+{
+  "enabled": {
+    "description": "启用社交与媒体模块",
+    "type": "bool",
+    "default": true
+  },
+  "admin_qq": {
+    "description": "管理员 QQ 号",
+    "hint": "只有这个 QQ 可以使用发图、表情和发动态命令",
+    "type": "string",
+    "default": "YOUR_QQ_ID"
+  },
+  "admin_umo": {
+    "description": "管理员会话 UMO",
+    "hint": "可留空；默认 napcat:FriendMessage:管理员QQ",
+    "type": "string",
+    "default": "napcat:FriendMessage:YOUR_QQ_ID"
+  },
+  "allow_groups": {
+    "description": "允许群聊使用",
+    "type": "bool",
+    "default": false
+  },
+  "qzone_default_privacy": {
+    "description": "动态默认权限",
+    "hint": "公开 / 好友 / 私密；默认好友可见",
+    "type": "string",
+    "default": "好友"
+  },
+  "qzone_max_images": {
+    "description": "动态最多图片数",
+    "type": "int",
+    "default": 9
+  },
+  "qzone_max_chars": {
+    "description": "动态正文最大字数",
+    "type": "int",
+    "default": 2000
+  },
+  "qzone_cooldown_seconds": {
+    "description": "动态发布冷却时间（秒）",
+    "type": "int",
+    "default": 60
+  },
+  "media_cooldown_seconds": {
+    "description": "聊天发图冷却时间（秒）",
+    "type": "int",
+    "default": 2
+  },
+  "allow_llm_media": {
+    "description": "允许大肥鱼主动发图/表情",
+    "hint": "开启后她可以在聊天中调用 send_media 工具",
+    "type": "bool",
+    "default": true
+  },
+  "allow_llm_qzone": {
+    "description": "允许大肥鱼通过 LLM 工具自动发动态",
+    "hint": "默认关闭；定时动态不受这个开关影响",
+    "type": "bool",
+    "default": false
+  },
+  "qzone_auto_enabled": {
+    "description": "启用每日自动动态",
+    "type": "bool",
+    "default": true
+  },
+  "qzone_auto_time": {
+    "description": "每日动态生成时间",
+    "hint": "24 小时制，例如 09:30",
+    "type": "string",
+    "default": "09:30"
+  },
+  "qzone_auto_window_minutes": {
+    "description": "错过时间后的补发窗口（分钟）",
+    "hint": "例如 180 表示 09:30-12:30 内启动仍会补发；超出窗口不补发",
+    "type": "int",
+    "default": 180
+  },
+  "qzone_auto_privacy": {
+    "description": "自动动态权限",
+    "hint": "公开 / 好友 / 私密；默认好友可见",
+    "type": "string",
+    "default": "好友"
+  },
+  "qzone_auto_min_importance": {
+    "description": "纳入自动动态的最低重要度",
+    "hint": "LivingMemory 记忆重要度，0-1；默认 0.6",
+    "type": "float",
+    "default": 0.6
+  },
+  "qzone_auto_max_items": {
+    "description": "每次最多读取的重要记忆条数",
+    "type": "int",
+    "default": 5
+  },
+  "qzone_auto_max_chars": {
+    "description": "自动动态最大字数",
+    "type": "int",
+    "default": 180
+  },
+  "qzone_auto_umo": {
+    "description": "自动动态使用的会话 UMO",
+    "hint": "用于读取对应会话的记忆和心情；默认主人的私聊",
+    "type": "string",
+    "default": "napcat:FriendMessage:YOUR_QQ_ID"
+  },
+  "qzone_auto_memory_plugin": {
+    "description": "长期记忆插件目录名",
+    "type": "string",
+    "default": "astrbot_plugin_livingmemory"
+  },
+  "qzone_auto_heart_plugin": {
+    "description": "心脏插件目录名",
+    "type": "string",
+    "default": "astrbot_plugin_dafeiyu_heart"
+  },
+  "qzone_auto_blocklist": {
+    "description": "自动动态隐私敏感词",
+    "hint": "逗号分隔；生成内容命中任一词就跳过，不发布",
+    "type": "string",
+    "default": "QQ号,电话,手机号,地址,住址,学校,公司,单位,医院,病情,身份证,银行卡,密码,工资,家庭矛盾,真实姓名,聊天记录,隐私"
+  },
+  "qzone_platform_id": {
+    "description": "AstrBot 平台 ID",
+    "hint": "当前 OneBot 平台 ID，默认 napcat",
+    "type": "string",
+    "default": "napcat"
+  },
+  "sticker_auto_enabled": {
+    "description": "启用对话自动表情包",
+    "type": "bool",
+    "default": true
+  },
+  "sticker_auto_probability": {
+    "description": "回复携带表情包的概率",
+    "hint": "0.3 表示约 30% 的文本回复会带一张表情包",
+    "type": "float",
+    "default": 0.3
+  },
+  "sticker_auto_max_count": {
+    "description": "单次回复最多连续表情包数量",
+    "hint": "最大 2；不会连续发送 3 条",
+    "type": "int",
+    "default": 2
+  },
+  "sticker_auto_double_chance": {
+    "description": "触发时连续发两条的概率",
+    "hint": "0.5 表示在已经决定发表情包的回复里，一半概率发两条",
+    "type": "float",
+    "default": 0.5
+  },
+  "sticker_auto_cooldown_seconds": {
+    "description": "自动表情包冷却时间（秒）",
+    "type": "int",
+    "default": 60
+  },
+  "sticker_auto_skip_if_media": {
+    "description": "回复已有图片/语音/视频时跳过表情包",
+    "type": "bool",
+    "default": true
+  },
+  "sticker_auto_skip_if_face": {
+    "description": "回复已有 QQ 小黄脸时跳过表情包",
+    "type": "bool",
+    "default": false
+  },
+  "sticker_pack": {
+    "description": "表情包品牌子目录",
+    "hint": "默认读取 stickers/dafeiyu",
+    "type": "string",
+    "default": "dafeiyu"
+  },
+  "sticker_catalog_file": {
+    "description": "表情包目录文件名",
+    "type": "string",
+    "default": "catalog.json"
+  },
+  "mood_cache_seconds": {
+    "description": "读取心情的缓存秒数",
+    "type": "int",
+    "default": 60
+  },
+  "image_dir": {
+    "description": "图片素材目录（相对插件数据目录）",
+    "type": "string",
+    "default": "images"
+  },
+  "sticker_dir": {
+    "description": "表情包素材目录（相对插件数据目录）",
+    "type": "string",
+    "default": "stickers"
+  }
+}

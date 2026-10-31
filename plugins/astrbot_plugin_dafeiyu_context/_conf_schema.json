@@ -1,0 +1,38 @@
+{
+  "enabled": {
+    "description": "启用上下文优化",
+    "hint": "关闭后插件完全不处理请求上下文。",
+    "type": "bool",
+    "default": true
+  },
+  "max_messages": {
+    "description": "保留最近多少条非 system 消息",
+    "hint": "更早的消息会整段折叠成一条标记。工具调用与其结果按消息块整体保留或整体折叠，不会拆散。默认 40。",
+    "type": "int",
+    "default": 40
+  },
+  "max_tool_result_chars": {
+    "description": "单条历史工具结果最多保留的字符数",
+    "hint": "超过后截断并追加“…[工具结果已折叠]”。设为 0 可关闭工具结果截断。默认 300。",
+    "type": "int",
+    "default": 300
+  },
+  "fold_tool_results": {
+    "description": "折叠过长的历史工具结果",
+    "hint": "只处理上下文中已经存在的历史工具结果，不会处理本轮刚产生的工具结果。",
+    "type": "bool",
+    "default": true
+  },
+  "fold_duplicate_wake_prompts": {
+    "description": "折叠重复的唤醒提示",
+    "hint": "只保留最新一条以时间开头的唤醒提示，较早的替换为折叠标记；识别不准时跳过。",
+    "type": "bool",
+    "default": true
+  },
+  "keep_system": {
+    "description": "始终保留 system 消息",
+    "hint": "开启后，上下文中的 system 消息不参与条数裁剪。",
+    "type": "bool",
+    "default": true
+  }
+}

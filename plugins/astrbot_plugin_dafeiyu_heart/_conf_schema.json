@@ -1,0 +1,28 @@
+{
+  "enabled": {
+    "description": "启用心脏模块",
+    "type": "bool",
+    "default": true
+  },
+  "main_umo": {
+    "description": "主要结算会话 UMO",
+    "hint": "留空则自动结算最近有消息的私聊会话；建议填 napcat:FriendMessage:你的大号QQ",
+    "type": "string",
+    "default": ""
+  },
+  "settle_start_hour": {
+    "description": "结算开始小时",
+    "type": "int",
+    "default": 4
+  },
+  "settle_end_hour": {
+    "description": "结算结束小时",
+    "type": "int",
+    "default": 8
+  },
+  "max_transcript_chars": {
+    "description": "结算时最多读取的聊天字数",
+    "type": "int",
+    "default": 12000
+  }
+}

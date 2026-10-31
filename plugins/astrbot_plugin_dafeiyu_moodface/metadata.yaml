@@ -1,0 +1,6 @@
+name: astrbot_plugin_dafeiyu_moodface
+display_name: 大肥鱼心情表情
+author: dafeiyu-tools
+version: 1.0.0
+desc: 按当前心情给部分回复附加 QQ 原生表情
+short_desc: 根据心情随机附带 QQ 表情

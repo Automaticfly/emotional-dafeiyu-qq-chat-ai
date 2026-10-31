@@ -1,0 +1,35 @@
+{
+  "enabled": {
+    "description": "启用心情表情",
+    "type": "bool",
+    "default": true
+  },
+  "face_probability": {
+    "description": "回复携带 QQ 表情的概率",
+    "hint": "0.5 表示约一半回复会带表情；范围 0-1",
+    "type": "float",
+    "default": 0.5
+  },
+  "inline_probability": {
+    "description": "表情跟随最后一段对话的概率",
+    "hint": "0.5 表示一半跟在最后一段文字末尾，一半在对话后独立发送",
+    "type": "float",
+    "default": 0.5
+  },
+  "mood_umo": {
+    "description": "读取心情的会话 UMO",
+    "hint": "留空则跟随当前会话；通常保持空即可",
+    "type": "string",
+    "default": ""
+  },
+  "mood_cache_seconds": {
+    "description": "心情缓存时间（秒）",
+    "type": "int",
+    "default": 60
+  },
+  "heart_plugin": {
+    "description": "心脏插件目录名",
+    "type": "string",
+    "default": "astrbot_plugin_dafeiyu_heart"
+  }
+}

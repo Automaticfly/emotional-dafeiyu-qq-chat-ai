@@ -1,0 +1,18 @@
+{
+  "networks": {
+    "httpServers": [],
+    "wsServers": [],
+    "httpClients": [],
+    "wsClients": [
+      {
+        "name": "astrbot",
+        "enabled": true,
+        "url": "ws://astrbot:6199/ws",
+        "role": "Universal",
+        "accessToken": "CHANGE_ME_SAME_AS_ASTRBOT_PLATFORM_TOKEN",
+        "messageFormat": "array",
+        "reconnectIntervalMs": 5000
+      }
+    ]
+  }
+}

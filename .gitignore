@@ -1,0 +1,58 @@
+# Runtime data and personal information
+data/*
+!data/.gitkeep
+!data/README.md
+config/cmd_config.json
+config/*.local.json
+.env
+*.pem
+*private*key*
+deepseek-key.txt
+豆包语音.txt
+后台.txt
+大号QQ.txt
+QQ登录二维码*.png
+feiyu_cute_demo.mp3
+
+# Databases, logs and temporary files
+*.db
+*.db-shm
+*.db-wal
+*.log
+*.bak
+*.tmp
+*.mp3
+*.wav
+*.m4a
+*.flac
+data/logs/
+data/temp/
+data/attachments/
+data/webchat/
+data/plugin_data/
+data/config/
+data/snowluma/
+data/snowluma-qq-config/
+data/snowluma-qq-data/
+
+# Python and Node caches
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Local editor / tooling
+.serena/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Downloaded archives
+downloads/
+*.zip
+*.tar.gz

@@ -1,0 +1,6 @@
+name: astrbot_plugin_dafeiyu_context
+display_name: 大肥鱼上下文优化
+author: dafeiyu-tools
+version: 1.0.0
+desc: 保守折叠每轮可见上下文，减少 token；不修改核心、不删除原始消息
+short_desc: 折叠旧消息、重复唤醒提示与超长工具结果

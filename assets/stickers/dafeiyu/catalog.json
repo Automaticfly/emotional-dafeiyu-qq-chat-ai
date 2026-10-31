@@ -1,0 +1,1394 @@
+{
+  "pack": "dafeiyu",
+  "source": "https://github.com/diwer/ai-biaoqingbao",
+  "license": "非商业个人使用；详见同目录 NOTICE.txt",
+  "count": 100,
+  "stickers": [
+    {
+      "id": "001",
+      "file": "001-不服气.gif",
+      "name": "不服气",
+      "meaning": "不服气",
+      "category": "首批常用",
+      "keywords": [
+        "不服气",
+        "首批常用"
+      ],
+      "ocr_text": "2一< / 不服气",
+      "ocr_primary": "不服气"
+    },
+    {
+      "id": "002",
+      "file": "002-开心.gif",
+      "name": "开心",
+      "meaning": "开心",
+      "category": "首批常用",
+      "keywords": [
+        "开心",
+        "首批常用"
+      ],
+      "ocr_text": "GA,‘oea® / 所后同上 / (]me. / ae他aA,~7 / OZae / 人",
+      "ocr_primary": "所后同上"
+    },
+    {
+      "id": "003",
+      "file": "003-点赞.gif",
+      "name": "点赞",
+      "meaning": "点赞",
+      "category": "首批常用",
+      "keywords": [
+        "点赞",
+        "首批常用"
+      ],
+      "ocr_text": "eqbLy1 / amR / ae / <i / oy先先 / AM-A",
+      "ocr_primary": "oy先先"
+    },
+    {
+      "id": "004",
+      "file": "004-委屈.gif",
+      "name": "委屈",
+      "meaning": "委屈",
+      "category": "首批常用",
+      "keywords": [
+        "委屈",
+        "首批常用"
+      ],
+      "ocr_text": "FRR / dy— / LZiY=o1€) / CCoalw / 人eh / Si>",
+      "ocr_primary": "人eh"
+    },
+    {
+      "id": "005",
+      "file": "005-生气.gif",
+      "name": "生气",
+      "meaning": "生气",
+      "category": "首批常用",
+      "keywords": [
+        "生气",
+        "首批常用"
+      ],
+      "ocr_text": "和SS / 区让hy / 3 / 生气",
+      "ocr_primary": "区让hy"
+    },
+    {
+      "id": "006",
+      "file": "006-无语.gif",
+      "name": "无语",
+      "meaning": "无语",
+      "category": "首批常用",
+      "keywords": [
+        "无语",
+        "首批常用"
+      ],
+      "ocr_text": "SE / Lyfl和ie / ieakf5yiSN / Pwyb / \\五 / Fiz",
+      "ocr_primary": "Lyfl和ie"
+    },
+    {
+      "id": "007",
+      "file": "007-困了.gif",
+      "name": "困了",
+      "meaning": "困了",
+      "category": "首批常用",
+      "keywords": [
+        "困了",
+        "首批常用"
+      ],
+      "ocr_text": "|/SS) / )iteA / sfCORA / .reWe / 了",
+      "ocr_primary": "了"
+    },
+    {
+      "id": "008",
+      "file": "008-谢谢.gif",
+      "name": "谢谢",
+      "meaning": "谢谢",
+      "category": "首批常用",
+      "keywords": [
+        "谢谢",
+        "首批常用"
+      ],
+      "ocr_text": "[一 / PENte人 / AESON / acayx / They*Ee / See",
+      "ocr_primary": "谢谢"
+    },
+    {
+      "id": "009",
+      "file": "009-收到！.gif",
+      "name": "收到！",
+      "meaning": "收到！",
+      "category": "首批常用",
+      "keywords": [
+        "收到！",
+        "首批常用"
+      ],
+      "ocr_text": "y.SS / ,fa*We / ke国光\\ / (evoSaaS.) / i.| / L(APS",
+      "ocr_primary": "ke国光\\"
+    },
+    {
+      "id": "010",
+      "file": "010-抱抱.gif",
+      "name": "抱抱",
+      "meaning": "抱抱",
+      "category": "首批常用",
+      "keywords": [
+        "抱抱",
+        "首批常用"
+      ],
+      "ocr_text": "phTARAN / y|PLNS / CeKA。NAD) / —Je.Ney, / Qewer",
+      "ocr_primary": "CeKA。NAD)"
+    },
+    {
+      "id": "011",
+      "file": "011-震惊.gif",
+      "name": "震惊",
+      "meaning": "震惊",
+      "category": "首批常用",
+      "keywords": [
+        "震惊",
+        "首批常用"
+      ],
+      "ocr_text": "ARaER / <项[mw|让yD / SSie / feIR",
+      "ocr_primary": "<项[mw|让yD"
+    },
+    {
+      "id": "012",
+      "file": "012-再见.gif",
+      "name": "再见",
+      "meaning": "再见",
+      "category": "首批常用",
+      "keywords": [
+        "再见",
+        "首批常用"
+      ],
+      "ocr_text": "Ra / Soe / Fa见",
+      "ocr_primary": "Fa见"
+    },
+    {
+      "id": "013",
+      "file": "013-喜欢.gif",
+      "name": "喜欢",
+      "meaning": "喜欢",
+      "category": "首批常用",
+      "keywords": [
+        "喜欢",
+        "首批常用"
+      ],
+      "ocr_text": "a> / S“4和 / ORS / IeYe / ehGN) / Gwe",
+      "ocr_primary": "S“4和"
+    },
+    {
+      "id": "014",
+      "file": "014-对不起.gif",
+      "name": "对不起",
+      "meaning": "对不起",
+      "category": "首批常用",
+      "keywords": [
+        "对不起",
+        "首批常用"
+      ],
+      "ocr_text": "|、和ee / G=.‘ / 对不起",
+      "ocr_primary": "对不起"
+    },
+    {
+      "id": "015",
+      "file": "015-开饭啦.gif",
+      "name": "开饭啦",
+      "meaning": "开饭啦",
+      "category": "首批常用",
+      "keywords": [
+        "开饭啦",
+        "首批常用"
+      ],
+      "ocr_text": "人=AR / ee| / We人(4p\\)) / veiJi,7 / D>: / EO",
+      "ocr_primary": "We人(4p\\))"
+    },
+    {
+      "id": "016",
+      "file": "016-加油.gif",
+      "name": "加油",
+      "meaning": "加油",
+      "category": "首批常用",
+      "keywords": [
+        "加油",
+        "首批常用"
+      ],
+      "ocr_text": "|7.多Re / yyeeNS / (A，ae|SNS / CeDrugyD) / 3 / OyYBy",
+      "ocr_primary": "|7.多Re"
+    },
+    {
+      "id": "017",
+      "file": "017-早安.gif",
+      "name": "早安",
+      "meaning": "一天开始时打招呼",
+      "category": "日常回应",
+      "keywords": [
+        "早安",
+        "一天开始时打招呼",
+        "日常回应"
+      ],
+      "ocr_text": "AS / el / CZmnea人» / id@RS / aNPP / 早安",
+      "ocr_primary": "早安"
+    },
+    {
+      "id": "018",
+      "file": "018-晚安.gif",
+      "name": "晚安",
+      "meaning": "睡前道别祝好梦",
+      "category": "日常回应",
+      "keywords": [
+        "晚安",
+        "睡前道别祝好梦",
+        "日常回应"
+      ],
+      "ocr_text": "ae\\ / a,\\&2\\7 / 晚安",
+      "ocr_primary": "晚安"
+    },
+    {
+      "id": "019",
+      "file": "019-在吗.gif",
+      "name": "在吗",
+      "meaning": "试探对方是否在线",
+      "category": "日常回应",
+      "keywords": [
+        "在吗",
+        "试探对方是否在线",
+        "日常回应"
+      ],
+      "ocr_text": "多hei/A / on\"8\\ / LoaINGWS / ¢oeadN» / WH&RE",
+      "ocr_primary": "多hei/A"
+    },
+    {
+      "id": "020",
+      "file": "020-来了.gif",
+      "name": "来了",
+      "meaning": "表示已经到场或开始回应",
+      "category": "日常回应",
+      "keywords": [
+        "来了",
+        "表示已经到场或开始回应",
+        "日常回应"
+      ],
+      "ocr_text": "ZstSS / (4re:Y) / 人i / KT",
+      "ocr_primary": "人i"
+    },
+    {
+      "id": "021",
+      "file": "021-等一下.gif",
+      "name": "等一下",
+      "meaning": "请对方稍候",
+      "category": "日常回应",
+      "keywords": [
+        "等一下",
+        "请对方稍候",
+        "日常回应"
+      ],
+      "ocr_text": "”了 / YBnge*») / 1X\"AA / A\\LGAASSS / Sys|UF / 等一下",
+      "ocr_primary": "等一下"
+    },
+    {
+      "id": "022",
+      "file": "022-马上到.gif",
+      "name": "马上到",
+      "meaning": "告知正在赶来",
+      "category": "日常回应",
+      "keywords": [
+        "马上到",
+        "告知正在赶来",
+        "日常回应"
+      ],
+      "ocr_text": "Afid / 8;heS|A / ous / Op.,SU4总| / V4本，bd几 / 马上到",
+      "ocr_primary": "马上到"
+    },
+    {
+      "id": "023",
+      "file": "023-没问题.gif",
+      "name": "没问题",
+      "meaning": "自信答应请求",
+      "category": "日常回应",
+      "keywords": [
+        "没问题",
+        "自信答应请求",
+        "日常回应"
+      ],
+      "ocr_text": "本:Sof> / {=e也\\ / /又、NWy / [a]而 / 2;",
+      "ocr_primary": "本:Sof>"
+    },
+    {
+      "id": "024",
+      "file": "024-好的.gif",
+      "name": "好的",
+      "meaning": "温和表示同意",
+      "category": "日常回应",
+      "keywords": [
+        "好的",
+        "温和表示同意",
+        "日常回应"
+      ],
+      "ocr_text": "(Pay / Cpa / SOR / 好的",
+      "ocr_primary": "好的"
+    },
+    {
+      "id": "025",
+      "file": "025-明白.gif",
+      "name": "明白",
+      "meaning": "表示已经理解",
+      "category": "日常回应",
+      "keywords": [
+        "明白",
+        "表示已经理解",
+        "日常回应"
+      ],
+      "ocr_text": "Qyeniger\\\\P / Me / -一GeBEDry) / <<.ae",
+      "ocr_primary": "-一GeBEDry)"
+    },
+    {
+      "id": "026",
+      "file": "026-安排了.gif",
+      "name": "安排了",
+      "meaning": "表示已着手办理",
+      "category": "日常回应",
+      "keywords": [
+        "安排了",
+        "表示已着手办理",
+        "日常回应"
+      ],
+      "ocr_text": "SS / /从 / Gdye / ZcHE",
+      "ocr_primary": "/从"
+    },
+    {
+      "id": "027",
+      "file": "027-辛苦了.gif",
+      "name": "辛苦了",
+      "meaning": "表达体贴与慰劳",
+      "category": "日常回应",
+      "keywords": [
+        "辛苦了",
+        "表达体贴与慰劳",
+        "日常回应"
+      ],
+      "ocr_text": "VA,tta.\\ / 4rnme / L党NS / he.eS) / KR人 / jlS;下",
+      "ocr_primary": "jlS;下"
+    },
+    {
+      "id": "028",
+      "file": "028-拜托了.gif",
+      "name": "拜托了",
+      "meaning": "礼貌认真地请求帮助",
+      "category": "日常回应",
+      "keywords": [
+        "拜托了",
+        "礼貌认真地请求帮助",
+        "日常回应"
+      ],
+      "ocr_text": "ifBSNSic / “Aymmtm= / 0LTwa,\\) / JDla’“a¢Va / AC)N‘@)a| / Jveg~)Nea;S)",
+      "ocr_primary": "Jveg~)Nea;S)"
+    },
+    {
+      "id": "029",
+      "file": "029-笑死.gif",
+      "name": "笑死",
+      "meaning": "被逗得忍不住笑",
+      "category": "抽象反应",
+      "keywords": [
+        "笑死",
+        "被逗得忍不住笑",
+        "抽象反应"
+      ],
+      "ocr_text": "iYN / [AAS / ArAV, / 天",
+      "ocr_primary": "天"
+    },
+    {
+      "id": "030",
+      "file": "030-哈哈哈.gif",
+      "name": "哈哈哈",
+      "meaning": "毫不掩饰地大笑",
+      "category": "抽象反应",
+      "keywords": [
+        "哈哈哈",
+        "毫不掩饰地大笑",
+        "抽象反应"
+      ],
+      "ocr_text": "《往生wee / a—\\\\) / ADAEAan / HeheaAe",
+      "ocr_primary": "《往生wee"
+    },
+    {
+      "id": "031",
+      "file": "031-绷不住了.gif",
+      "name": "绷不住了",
+      "meaning": "努力忍笑最后失败",
+      "category": "抽象反应",
+      "keywords": [
+        "绷不住了",
+        "努力忍笑最后失败",
+        "抽象反应"
+      ],
+      "ocr_text": "人7:eae!和 / Keoe / 绷不住了",
+      "ocr_primary": "绷不住了"
+    },
+    {
+      "id": "032",
+      "file": "032-离谱.gif",
+      "name": "离谱",
+      "meaning": "对不合理情况感到荒谬",
+      "category": "抽象反应",
+      "keywords": [
+        "离谱",
+        "对不合理情况感到荒谬",
+        "抽象反应"
+      ],
+      "ocr_text": "Ta...ar» / GyPASk / Sea",
+      "ocr_primary": "Ta...ar»"
+    },
+    {
+      "id": "033",
+      "file": "033-真的假的.gif",
+      "name": "真的假的",
+      "meaning": "惊讶地确认信息真假",
+      "category": "抽象反应",
+      "keywords": [
+        "真的假的",
+        "惊讶地确认信息真假",
+        "抽象反应"
+      ],
+      "ocr_text": ">全了 / 2~NE / LA法;ayy / fray: / 真的假的",
+      "ocr_primary": "真的假的"
+    },
+    {
+      "id": "034",
+      "file": "034-啊这.gif",
+      "name": "啊这",
+      "meaning": "一时语塞与尴尬",
+      "category": "抽象反应",
+      "keywords": [
+        "啊这",
+        "一时语塞与尴尬",
+        "抽象反应"
+      ],
+      "ocr_text": "人人 / 于人下SS / 啊巡",
+      "ocr_primary": "于人下SS"
+    },
+    {
+      "id": "035",
+      "file": "035-好家伙.gif",
+      "name": "好家伙",
+      "meaning": "对超出预期的事情感叹",
+      "category": "抽象反应",
+      "keywords": [
+        "好家伙",
+        "对超出预期的事情感叹",
+        "抽象反应"
+      ],
+      "ocr_text": "SeAe / TFARK",
+      "ocr_primary": "TFARK"
+    },
+    {
+      "id": "036",
+      "file": "036-我裂开了.gif",
+      "name": "我裂开了",
+      "meaning": "遇到打击后的夸张崩溃",
+      "category": "抽象反应",
+      "keywords": [
+        "我裂开了",
+        "遇到打击后的夸张崩溃",
+        "抽象反应"
+      ],
+      "ocr_text": "G光V4 / RAT",
+      "ocr_primary": "G光V4"
+    },
+    {
+      "id": "037",
+      "file": "037-麻了.gif",
+      "name": "麻了",
+      "meaning": "被反复折腾到失去反应",
+      "category": "抽象反应",
+      "keywords": [
+        "麻了",
+        "被反复折腾到失去反应",
+        "抽象反应"
+      ],
+      "ocr_text": "YAN / Y}:AYe\\) / hit",
+      "ocr_primary": "Y}:AYe\\)"
+    },
+    {
+      "id": "038",
+      "file": "038-破防了.gif",
+      "name": "破防了",
+      "meaning": "情绪防线被击穿",
+      "category": "抽象反应",
+      "keywords": [
+        "破防了",
+        "情绪防线被击穿",
+        "抽象反应"
+      ],
+      "ocr_text": "@eoRe / <3Zam)\\ / (tLeVeGFXo / Feeay” / SR / roa.&网，",
+      "ocr_primary": "roa.&网，"
+    },
+    {
+      "id": "039",
+      "file": "039-红温了.gif",
+      "name": "红温了",
+      "meaning": "气到脸红发烫",
+      "category": "抽象反应",
+      "keywords": [
+        "红温了",
+        "气到脸红发烫",
+        "抽象反应"
+      ],
+      "ocr_text": "Vi人 / imA> / J>”SD / dSey / ZTey / /ID",
+      "ocr_primary": "Vi人"
+    },
+    {
+      "id": "040",
+      "file": "040-那咋了.gif",
+      "name": "那咋了",
+      "meaning": "坦然或倔强地回应质疑",
+      "category": "抽象反应",
+      "keywords": [
+        "那咋了",
+        "坦然或倔强地回应质疑",
+        "抽象反应"
+      ],
+      "ocr_text": "VA* / /ev,~| / 人2 / L~TeWA2 / (aieMee / ShaMaw)Sdy",
+      "ocr_primary": "人2"
+    },
+    {
+      "id": "041",
+      "file": "041-已老实.gif",
+      "name": "已老实",
+      "meaning": "吃过苦头后乖乖认怂",
+      "category": "抽象反应",
+      "keywords": [
+        "已老实",
+        "吃过苦头后乖乖认怂",
+        "抽象反应"
+      ],
+      "ocr_text": "i(isymin / A.-eeOr / }atie> / 已老实",
+      "ocr_primary": "已老实"
+    },
+    {
+      "id": "042",
+      "file": "042-求放过.gif",
+      "name": "求放过",
+      "meaning": "请求停止折腾或为难",
+      "category": "抽象反应",
+      "keywords": [
+        "求放过",
+        "请求停止折腾或为难",
+        "抽象反应"
+      ],
+      "ocr_text": "5\\\\vaeh> / aedSS\\ / ASHEY / Stad”oei) / 过 / ALLL",
+      "ocr_primary": "过"
+    },
+    {
+      "id": "043",
+      "file": "043-我没事.gif",
+      "name": "我没事",
+      "meaning": "强颜欢笑地表示撑得住",
+      "category": "抽象反应",
+      "keywords": [
+        "我没事",
+        "强颜欢笑地表示撑得住",
+        "抽象反应",
+        "没事"
+      ],
+      "ocr_text": "Ah‘N.Ya / Z.S / z=WSteN( / GPLGy / a»knbyLZ / 没事",
+      "ocr_primary": "没事"
+    },
+    {
+      "id": "044",
+      "file": "044-不想说话.gif",
+      "name": "不想说话",
+      "meaning": "疲惫或无奈地保持沉默",
+      "category": "抽象反应",
+      "keywords": [
+        "不想说话",
+        "疲惫或无奈地保持沉默",
+        "抽象反应"
+      ],
+      "ocr_text": "APEA / ES / OreWsei / 6s/s@ / 不想说话",
+      "ocr_primary": "不想说话"
+    },
+    {
+      "id": "045",
+      "file": "045-静静看戏.gif",
+      "name": "静静看戏",
+      "meaning": "安静围观事情发展",
+      "category": "抽象反应",
+      "keywords": [
+        "静静看戏",
+        "安静围观事情发展",
+        "抽象反应"
+      ],
+      "ocr_text": "See,=baJD) / AfayaXX",
+      "ocr_primary": "See,=baJD)"
+    },
+    {
+      "id": "046",
+      "file": "046-吃瓜.gif",
+      "name": "吃瓜",
+      "meaning": "兴致勃勃地围观八卦",
+      "category": "抽象反应",
+      "keywords": [
+        "吃瓜",
+        "兴致勃勃地围观八卦",
+        "抽象反应"
+      ],
+      "ocr_text": "ifiN / TCD",
+      "ocr_primary": "ifiN"
+    },
+    {
+      "id": "047",
+      "file": "047-拿捏了.gif",
+      "name": "拿捏了",
+      "meaning": "表示事情尽在掌握",
+      "category": "抽象反应",
+      "keywords": [
+        "拿捏了",
+        "表示事情尽在掌握",
+        "抽象反应"
+      ],
+      "ocr_text": "LA / AF®), / Ayas和E / 拿捏了 / 后",
+      "ocr_primary": "拿捏了"
+    },
+    {
+      "id": "048",
+      "file": "048-我懂你.gif",
+      "name": "我懂你",
+      "meaning": "表达理解与共鸣",
+      "category": "抽象反应",
+      "keywords": [
+        "我懂你",
+        "表达理解与共鸣",
+        "抽象反应"
+      ],
+      "ocr_text": "ieJ;ib / Hedoy / 我se / le(r",
+      "ocr_primary": "我se"
+    },
+    {
+      "id": "049",
+      "file": "049-尊嘟假嘟.gif",
+      "name": "尊嘟假嘟",
+      "meaning": "撒娇式地表示真的假的",
+      "category": "抽象反应",
+      "keywords": [
+        "尊嘟假嘟",
+        "撒娇式地表示真的假的",
+        "抽象反应"
+      ],
+      "ocr_text": "KePS / [NA / SN“Dy可 / 苯嘟假哪",
+      "ocr_primary": "苯嘟假哪"
+    },
+    {
+      "id": "050",
+      "file": "050-你礼貌吗.gif",
+      "name": "你礼貌吗",
+      "meaning": "用克制的质问回应冒犯",
+      "category": "抽象反应",
+      "keywords": [
+        "你礼貌吗",
+        "用克制的质问回应冒犯",
+        "抽象反应"
+      ],
+      "ocr_text": "|x2 / 7Y;eon / Wr1yy) / (RFLIAS",
+      "ocr_primary": "(RFLIAS"
+    },
+    {
+      "id": "051",
+      "file": "051-有被冒犯.gif",
+      "name": "有被冒犯",
+      "meaning": "表示受到了轻微冒犯",
+      "category": "抽象反应",
+      "keywords": [
+        "有被冒犯",
+        "表示受到了轻微冒犯",
+        "抽象反应"
+      ],
+      "ocr_text": "YDh人SS了 / Deh~ap / 有被冒儿 / Mm",
+      "ocr_primary": "有被冒儿"
+    },
+    {
+      "id": "052",
+      "file": "052-大可不必.gif",
+      "name": "大可不必",
+      "meaning": "婉拒没有必要的安排",
+      "category": "抽象反应",
+      "keywords": [
+        "大可不必",
+        "婉拒没有必要的安排",
+        "抽象反应"
+      ],
+      "ocr_text": "1INR、 / my— / 所Nu / ehayD / 大可不必",
+      "ocr_primary": "大可不必"
+    },
+    {
+      "id": "053",
+      "file": "053-退退退.gif",
+      "name": "退退退",
+      "meaning": "夸张地赶走烦恼",
+      "category": "抽象反应",
+      "keywords": [
+        "退退退",
+        "夸张地赶走烦恼",
+        "抽象反应"
+      ],
+      "ocr_text": "GUlaes / Gs~epy,",
+      "ocr_primary": "Gs~epy,"
+    },
+    {
+      "id": "054",
+      "file": "054-想你了.gif",
+      "name": "想你了",
+      "meaning": "表达惦念与想念",
+      "category": "亲密陪伴",
+      "keywords": [
+        "想你了",
+        "表达惦念与想念",
+        "亲密陪伴"
+      ],
+      "ocr_text": "LZyh> / (AAEeynt / SiehOD / 想你了",
+      "ocr_primary": "想你了"
+    },
+    {
+      "id": "055",
+      "file": "055-贴贴.gif",
+      "name": "贴贴",
+      "meaning": "撒娇地寻求亲近",
+      "category": "亲密陪伴",
+      "keywords": [
+        "贴贴",
+        "撒娇地寻求亲近",
+        "亲密陪伴"
+      ],
+      "ocr_text": "人es / 7eS) / 0ee: / us",
+      "ocr_primary": "人es"
+    },
+    {
+      "id": "056",
+      "file": "056-亲亲.gif",
+      "name": "亲亲",
+      "meaning": "送出一个可爱的飞吻",
+      "category": "亲密陪伴",
+      "keywords": [
+        "亲亲",
+        "送出一个可爱的飞吻",
+        "亲密陪伴"
+      ],
+      "ocr_text": "[/}wa.5 / j,|ke / SSGi, / a“AG\\) / VaatnA / (At(Aeis-y",
+      "ocr_primary": "Sg\\~*~过a"
+    },
+    {
+      "id": "057",
+      "file": "057-爱你.gif",
+      "name": "爱你",
+      "meaning": "直接表达喜爱与爱意",
+      "category": "亲密陪伴",
+      "keywords": [
+        "爱你",
+        "直接表达喜爱与爱意",
+        "亲密陪伴"
+      ],
+      "ocr_text": ">=}好 / ooyyees}a / NamfNiYY)yy / 2a)yy) / Fen / 二你",
+      "ocr_primary": "二你"
+    },
+    {
+      "id": "058",
+      "file": "058-摸摸头.gif",
+      "name": "摸摸头",
+      "meaning": "安慰或奖励对方",
+      "category": "亲密陪伴",
+      "keywords": [
+        "摸摸头",
+        "安慰或奖励对方",
+        "亲密陪伴"
+      ],
+      "ocr_text": "A / <_1\\ / &be‘Nt / Shoo / 措撞头 / S",
+      "ocr_primary": "措撞头"
+    },
+    {
+      "id": "059",
+      "file": "059-别难过.gif",
+      "name": "别难过",
+      "meaning": "劝慰低落的朋友",
+      "category": "亲密陪伴",
+      "keywords": [
+        "别难过",
+        "劝慰低落的朋友",
+        "亲密陪伴"
+      ],
+      "ocr_text": "6ff./> / MNieyiPs / YZyXe2>\\)六 / Se\\.人bs5) / cl. / 别难过",
+      "ocr_primary": "别难过"
+    },
+    {
+      "id": "060",
+      "file": "060-有我在.gif",
+      "name": "有我在",
+      "meaning": "表达可靠陪伴和支持",
+      "category": "亲密陪伴",
+      "keywords": [
+        "有我在",
+        "表达可靠陪伴和支持",
+        "亲密陪伴"
+      ],
+      "ocr_text": "AN / 人VikeAl¢x}) / 人 / 有我在",
+      "ocr_primary": "有我在"
+    },
+    {
+      "id": "061",
+      "file": "061-给你花.gif",
+      "name": "给你花",
+      "meaning": "送出祝福或表达欣赏",
+      "category": "亲密陪伴",
+      "keywords": [
+        "给你花",
+        "送出祝福或表达欣赏",
+        "亲密陪伴"
+      ],
+      "ocr_text": "TARAN / 人一=aVa / ehCee / SoWP / [arHe / 给你花",
+      "ocr_primary": "给你花"
+    },
+    {
+      "id": "062",
+      "file": "062-上班了.gif",
+      "name": "上班了",
+      "meaning": "开始一天的工作",
+      "category": "打工摸鱼",
+      "keywords": [
+        "上班了",
+        "开始一天的工作",
+        "打工摸鱼"
+      ],
+      "ocr_text": "Y7mi / [4aeSN / 存放 / 上班了",
+      "ocr_primary": "上班了"
+    },
+    {
+      "id": "063",
+      "file": "063-下班啦.gif",
+      "name": "下班啦",
+      "meaning": "开心结束工作",
+      "category": "打工摸鱼",
+      "keywords": [
+        "下班啦",
+        "开心结束工作",
+        "打工摸鱼"
+      ],
+      "ocr_text": "aex / M4v4|eS> / Se大 / a / TPBEB",
+      "ocr_primary": "Se大"
+    },
+    {
+      "id": "064",
+      "file": "064-摸鱼中.gif",
+      "name": "摸鱼中",
+      "meaning": "轻松表示正在偷闲",
+      "category": "打工摸鱼",
+      "keywords": [
+        "摸鱼中",
+        "轻松表示正在偷闲",
+        "打工摸鱼"
+      ],
+      "ocr_text": "AN / J / i?FdMy / 措鱼中",
+      "ocr_primary": "措鱼中"
+    },
+    {
+      "id": "065",
+      "file": "065-赶工中.gif",
+      "name": "赶工中",
+      "meaning": "正在忙着完成任务",
+      "category": "打工摸鱼",
+      "keywords": [
+        "赶工中",
+        "正在忙着完成任务",
+        "打工摸鱼"
+      ],
+      "ocr_text": "7EN / ay了 / RAR / (>afat} / Ay",
+      "ocr_primary": "ay了"
+    },
+    {
+      "id": "066",
+      "file": "066-我尽力了.gif",
+      "name": "我尽力了",
+      "meaning": "表达已经全力以赴",
+      "category": "打工摸鱼",
+      "keywords": [
+        "我尽力了",
+        "表达已经全力以赴",
+        "打工摸鱼"
+      ],
+      "ocr_text": "而| / Leie / ARAAA / CS / 人 / 我尽力了",
+      "ocr_primary": "我尽力了"
+    },
+    {
+      "id": "067",
+      "file": "067-不想上班.gif",
+      "name": "不想上班",
+      "meaning": "表达上班前的抗拒",
+      "category": "打工摸鱼",
+      "keywords": [
+        "不想上班",
+        "表达上班前的抗拒",
+        "打工摸鱼"
+      ],
+      "ocr_text": "人 / 不想上班",
+      "ocr_primary": "不想上班"
+    },
+    {
+      "id": "068",
+      "file": "068-开会中.gif",
+      "name": "开会中",
+      "meaning": "说明暂时不便回复",
+      "category": "打工摸鱼",
+      "keywords": [
+        "开会中",
+        "说明暂时不便回复",
+        "打工摸鱼"
+      ],
+      "ocr_text": "YrNY,,if / 0oyuaN / AfSy / edSD / 开会中 / a",
+      "ocr_primary": "开会中"
+    },
+    {
+      "id": "069",
+      "file": "069-我太难了.gif",
+      "name": "我太难了",
+      "meaning": "抱怨任务和生活压力",
+      "category": "打工摸鱼",
+      "keywords": [
+        "我太难了",
+        "抱怨任务和生活压力",
+        "打工摸鱼"
+      ],
+      "ocr_text": "7Wwlina4Oe / FOR / Ay”C~x / 我大难了",
+      "ocr_primary": "我大难了"
+    },
+    {
+      "id": "070",
+      "file": "070-CPU烧了.gif",
+      "name": "CPU烧了",
+      "meaning": "信息过载或思考卡住",
+      "category": "打工摸鱼",
+      "keywords": [
+        "CPU烧了",
+        "信息过载或思考卡住",
+        "打工摸鱼"
+      ],
+      "ocr_text": "Ya¥5a / <rsed.\\\\)) / “A>7ares, / CPU7 / JC",
+      "ocr_primary": "<rsed.\\\\))"
+    },
+    {
+      "id": "071",
+      "file": "071-救命.gif",
+      "name": "救命",
+      "meaning": "夸张表达忙乱和求助",
+      "category": "打工摸鱼",
+      "keywords": [
+        "救命",
+        "夸张表达忙乱和求助",
+        "打工摸鱼"
+      ],
+      "ocr_text": "A» / Ve / See«)ae / ore,'I / ALAR",
+      "ocr_primary": "See«)ae"
+    },
+    {
+      "id": "072",
+      "file": "072-让我缓缓.gif",
+      "name": "让我缓缓",
+      "meaning": "请求一点恢复时间",
+      "category": "打工摸鱼",
+      "keywords": [
+        "让我缓缓",
+        "请求一点恢复时间",
+        "打工摸鱼"
+      ],
+      "ocr_text": "J / fAN / 让我缓缓",
+      "ocr_primary": "让我缓缓"
+    },
+    {
+      "id": "073",
+      "file": "073-充电中.gif",
+      "name": "充电中",
+      "meaning": "休息恢复精力",
+      "category": "打工摸鱼",
+      "keywords": [
+        "充电中",
+        "休息恢复精力",
+        "打工摸鱼"
+      ],
+      "ocr_text": "充电中",
+      "ocr_primary": "充电中"
+    },
+    {
+      "id": "074",
+      "file": "074-干饭人.gif",
+      "name": "干饭人",
+      "meaning": "热情准备享用食物",
+      "category": "打工摸鱼",
+      "keywords": [
+        "干饭人",
+        "热情准备享用食物",
+        "打工摸鱼"
+      ],
+      "ocr_text": "S / Menfee / yeON / FinA / Y",
+      "ocr_primary": "Menfee"
+    },
+    {
+      "id": "075",
+      "file": "075-先吃一口.gif",
+      "name": "先吃一口",
+      "meaning": "先吃点东西再继续",
+      "category": "打工摸鱼",
+      "keywords": [
+        "先吃一口",
+        "先吃点东西再继续",
+        "打工摸鱼"
+      ],
+      "ocr_text": "AAA / AYadF站 / 用人e9 / ca.Ap / \\OyBex / \\>3了",
+      "ocr_primary": "用人e9"
+    },
+    {
+      "id": "076",
+      "file": "076-咖啡续命.gif",
+      "name": "咖啡续命",
+      "meaning": "靠咖啡提神继续工作",
+      "category": "打工摸鱼",
+      "keywords": [
+        "咖啡续命",
+        "靠咖啡提神继续工作",
+        "打工摸鱼"
+      ],
+      "ocr_text": "区 / Oke / \"全NY / @}42Ys)) / atsAt / WINJE25Gp",
+      "ocr_primary": "\"全NY"
+    },
+    {
+      "id": "077",
+      "file": "077-发工资啦.gif",
+      "name": "发工资啦",
+      "meaning": "为收入到账感到开心",
+      "category": "打工摸鱼",
+      "keywords": [
+        "发工资啦",
+        "为收入到账感到开心",
+        "打工摸鱼"
+      ],
+      "ocr_text": "LyweN / Sox.)Oe / ALMi",
+      "ocr_primary": "Sox.)Oe"
+    },
+    {
+      "id": "078",
+      "file": "078-疑惑.gif",
+      "name": "疑惑",
+      "meaning": "表示不理解或想问问题",
+      "category": "情绪状态",
+      "keywords": [
+        "疑惑",
+        "表示不理解或想问问题",
+        "情绪状态"
+      ],
+      "ocr_text": "Co / aeyN / me) / an",
+      "ocr_primary": "aeyN"
+    },
+    {
+      "id": "079",
+      "file": "079-嫌弃.gif",
+      "name": "嫌弃",
+      "meaning": "表达轻微的不喜欢",
+      "category": "情绪状态",
+      "keywords": [
+        "嫌弃",
+        "表达轻微的不喜欢",
+        "情绪状态"
+      ],
+      "ocr_text": "Capa / eeagi, / SeoYD / iZs / Git",
+      "ocr_primary": "eeagi,"
+    },
+    {
+      "id": "080",
+      "file": "080-紧张.gif",
+      "name": "紧张",
+      "meaning": "等待结果时的不安",
+      "category": "情绪状态",
+      "keywords": [
+        "紧张",
+        "等待结果时的不安",
+        "情绪状态"
+      ],
+      "ocr_text": "Pr— / CyiesVv / mm / 中又长 / PA",
+      "ocr_primary": "中又长"
+    },
+    {
+      "id": "081",
+      "file": "081-期待.gif",
+      "name": "期待",
+      "meaning": "盼望好消息或好事情",
+      "category": "情绪状态",
+      "keywords": [
+        "期待",
+        "盼望好消息或好事情",
+        "情绪状态"
+      ],
+      "ocr_text": "eu~人 / Sawe / 《on& / DeE / 区 / 革Z",
+      "ocr_primary": "eu~人"
+    },
+    {
+      "id": "082",
+      "file": "082-害羞.gif",
+      "name": "害羞",
+      "meaning": "不好意思或羞涩",
+      "category": "情绪状态",
+      "keywords": [
+        "害羞",
+        "不好意思或羞涩",
+        "情绪状态"
+      ],
+      "ocr_text": "fy了a四-N / 人 / =e",
+      "ocr_primary": "fy了a四-N"
+    },
+    {
+      "id": "083",
+      "file": "083-偷笑.gif",
+      "name": "偷笑",
+      "meaning": "忍不住偷偷发笑",
+      "category": "情绪状态",
+      "keywords": [
+        "偷笑",
+        "忍不住偷偷发笑",
+        "情绪状态"
+      ],
+      "ocr_text": "ake / 偷笑",
+      "ocr_primary": "偷笑"
+    },
+    {
+      "id": "084",
+      "file": "084-得意.gif",
+      "name": "得意",
+      "meaning": "为小小成就骄傲",
+      "category": "情绪状态",
+      "keywords": [
+        "得意",
+        "为小小成就骄傲",
+        "情绪状态"
+      ],
+      "ocr_text": "-六 / AA68)me / Ler / <<DS / 48== / FS",
+      "ocr_primary": "-六"
+    },
+    {
+      "id": "085",
+      "file": "085-心累.gif",
+      "name": "心累",
+      "meaning": "情绪上的疲惫",
+      "category": "情绪状态",
+      "keywords": [
+        "心累",
+        "情绪上的疲惫",
+        "情绪状态"
+      ],
+      "ocr_text": "一& / :人-所 / -AN / 4站Ry) / |SS / as)COs.E",
+      "ocr_primary": ":人-所"
+    },
+    {
+      "id": "086",
+      "file": "086-好累.gif",
+      "name": "好累",
+      "meaning": "身体累了想休息",
+      "category": "情绪状态",
+      "keywords": [
+        "好累",
+        "身体累了想休息",
+        "情绪状态"
+      ],
+      "ocr_text": "/SN / Tyee) / ue / UFAA",
+      "ocr_primary": "Tyee)"
+    },
+    {
+      "id": "087",
+      "file": "087-饿了.gif",
+      "name": "饿了",
+      "meaning": "表示想吃东西",
+      "category": "情绪状态",
+      "keywords": [
+        "饿了",
+        "表示想吃东西",
+        "情绪状态"
+      ],
+      "ocr_text": ".~人人 / 本 / hsSF / iI",
+      "ocr_primary": ".~人人"
+    },
+    {
+      "id": "088",
+      "file": "088-撑了.gif",
+      "name": "撑了",
+      "meaning": "吃饱到不想动",
+      "category": "情绪状态",
+      "keywords": [
+        "撑了",
+        "吃饱到不想动",
+        "情绪状态"
+      ],
+      "ocr_text": "ly / tes",
+      "ocr_primary": "tes"
+    },
+    {
+      "id": "089",
+      "file": "089-冻住了.gif",
+      "name": "冻住了",
+      "meaning": "表达天气冷或冷到发抖",
+      "category": "情绪状态",
+      "keywords": [
+        "冻住了",
+        "表达天气冷或冷到发抖",
+        "情绪状态"
+      ],
+      "ocr_text": "AR=PSFe / 冻住了",
+      "ocr_primary": "冻住了"
+    },
+    {
+      "id": "090",
+      "file": "090-热化了.gif",
+      "name": "热化了",
+      "meaning": "天气太热时的疲惫",
+      "category": "情绪状态",
+      "keywords": [
+        "热化了",
+        "天气太热时的疲惫",
+        "情绪状态"
+      ],
+      "ocr_text": "LO) / OR / PILST",
+      "ocr_primary": "PILST"
+    },
+    {
+      "id": "091",
+      "file": "091-满血复活.gif",
+      "name": "满血复活",
+      "meaning": "休息后恢复精神",
+      "category": "情绪状态",
+      "keywords": [
+        "满血复活",
+        "休息后恢复精神",
+        "情绪状态"
+      ],
+      "ocr_text": "ih~;.)\\ / Cf5RN / OF / 满血复活",
+      "ocr_primary": "满血复活"
+    },
+    {
+      "id": "092",
+      "file": "092-撤退.gif",
+      "name": "撤退",
+      "meaning": "表示先走一步或回避",
+      "category": "情绪状态",
+      "keywords": [
+        "撤退",
+        "表示先走一步或回避",
+        "情绪状态"
+      ],
+      "ocr_text": "AASMi / \\\\es / 撤退",
+      "ocr_primary": "撤退"
+    },
+    {
+      "id": "093",
+      "file": "093-确认眼神.gif",
+      "name": "确认眼神",
+      "meaning": "用默契的眼神确认彼此",
+      "category": "情绪状态",
+      "keywords": [
+        "确认眼神",
+        "用默契的眼神确认彼此",
+        "情绪状态"
+      ],
+      "ocr_text": "Te? / tatsD / 确认有眼神",
+      "ocr_primary": "确认有眼神"
+    },
+    {
+      "id": "094",
+      "file": "094-恭喜.gif",
+      "name": "恭喜",
+      "meaning": "庆祝对方的好消息",
+      "category": "祝福庆祝",
+      "keywords": [
+        "恭喜",
+        "庆祝对方的好消息",
+        "祝福庆祝"
+      ],
+      "ocr_text": "—FY / ‘ony¥4 / Gua / PsNim / CreyYW / ASaae)",
+      "ocr_primary": "‘ony¥4"
+    },
+    {
+      "id": "095",
+      "file": "095-发财啦.gif",
+      "name": "发财啦",
+      "meaning": "祝愿发财或庆祝进账",
+      "category": "祝福庆祝",
+      "keywords": [
+        "发财啦",
+        "祝愿发财或庆祝进账",
+        "祝福庆祝"
+      ],
+      "ocr_text": "人 / G>60)\"SN / “RDF / *4 / AcWi",
+      "ocr_primary": "人"
+    },
+    {
+      "id": "096",
+      "file": "096-接好运.gif",
+      "name": "接好运",
+      "meaning": "接住好运和好兆头",
+      "category": "祝福庆祝",
+      "keywords": [
+        "接好运",
+        "接住好运和好兆头",
+        "祝福庆祝"
+      ],
+      "ocr_text": "ag / Aie / fegeSrTVy / Gn,= / szZA / 接好运",
+      "ocr_primary": "接好运"
+    },
+    {
+      "id": "097",
+      "file": "097-欧气满满.gif",
+      "name": "欧气满满",
+      "meaning": "庆祝运气好抽到心仪结果",
+      "category": "祝福庆祝",
+      "keywords": [
+        "欧气满满",
+        "庆祝运气好抽到心仪结果",
+        "祝福庆祝"
+      ],
+      "ocr_text": "Ohmxd / Oe. / aemhw> / ferFSSAESSE / KKFis",
+      "ocr_primary": "ferFSSAESSE"
+    },
+    {
+      "id": "098",
+      "file": "098-好运加一.gif",
+      "name": "好运加一",
+      "meaning": "给对方加一份好运祝福",
+      "category": "祝福庆祝",
+      "keywords": [
+        "好运加一",
+        "给对方加一份好运祝福",
+        "祝福庆祝"
+      ],
+      "ocr_text": "AN / RON / fey)>wy: / (eS-~~ / SyaeeS / 好运加一",
+      "ocr_primary": "好运加一"
+    },
+    {
+      "id": "099",
+      "file": "099-生日快乐.gif",
+      "name": "生日快乐",
+      "meaning": "为生日送祝福",
+      "category": "祝福庆祝",
+      "keywords": [
+        "生日快乐",
+        "为生日送祝福",
+        "祝福庆祝"
+      ],
+      "ocr_text": "Boenr. / .AASVe). / GoreNS / WC>:¢)) / 生日快乐 / j",
+      "ocr_primary": "生日快乐"
+    },
+    {
+      "id": "100",
+      "file": "100-周末快乐.gif",
+      "name": "周末快乐",
+      "meaning": "庆祝周末与休息时间",
+      "category": "祝福庆祝",
+      "keywords": [
+        "周末快乐",
+        "庆祝周末与休息时间",
+        "祝福庆祝"
+      ],
+      "ocr_text": "‘A时en / A二;Rt / f<>5 / Oral)DB-;2 / Ozoe / 周末快乐",
+      "ocr_primary": "周末快乐"
+    }
+  ],
+  "ocr_indexed": true
+}
