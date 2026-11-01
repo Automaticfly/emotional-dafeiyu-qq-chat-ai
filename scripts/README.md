@@ -7,6 +7,7 @@
 | `install.sh` | 首次安装：检查权限、生成配置、构建启动、保存初始账号密码 |
 | `update.sh` | 从 GitHub 同步最新代码，重建并重启容器 |
 | `uninstall.sh` | 停止并删除容器，可选删除数据 |
+| `inject.sh` | 增量注入到已有 AstrBot + SnowLuma，不碰 data/config |
 
 Windows 原生 PowerShell 脚本：
 
@@ -15,6 +16,7 @@ Windows 原生 PowerShell 脚本：
 | `install.ps1` | Windows 首次安装，使用 `docker-compose.windows.yml` |
 | `update.ps1` | Windows 更新，支持 `-Check`、`-NoRestart`、`-Stash` |
 | `uninstall.ps1` | Windows 卸载，支持 `-Purge`、`-RemoveImages` |
+| `inject.ps1` | Windows 增量注入到已有部署 |
 
 Windows 完整步骤见 [docs/WINDOWS.md](../docs/WINDOWS.md)。
 
@@ -137,6 +139,22 @@ powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -Purge
 - 初始账号密码写入 `data\INITIAL_CREDENTIALS.txt`
 - 正在运行的 `update.ps1` 会更新为 `update.ps1.new`，下次手动替换
 - 完整说明见 [docs/WINDOWS.md](../docs/WINDOWS.md)
+
+## 增量安装
+
+已有 AstrBot + SnowLuma，只想补大肥鱼层：
+
+```bash
+bash scripts/inject.sh --path /opt/astrbot
+```
+
+Windows：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\inject.ps1 -Path D:\dafeiyu
+```
+
+只补插件、补丁、人格模板和配置示例，不修改 `data/config`、`data/cmd_config.json`、`.env` 和用户 compose。注入前会备份，注入后做健康检查，失败自动回滚。详见 [docs/INCREMENTAL.md](../docs/INCREMENTAL.md)。
 
 ## 更新
 

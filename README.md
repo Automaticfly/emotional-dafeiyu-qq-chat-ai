@@ -9,7 +9,7 @@
 >
 > 详细声明见 [DISCLAIMER.md](DISCLAIMER.md)。
 
-**当前版本：v1.2.5** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
+**当前版本：v1.3.0** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
 
 > **部署建议**
 >
@@ -106,6 +106,8 @@
 ### 部署与安全
 
 - 机器人账号建议使用 QQ 小号，大号通过 `/认主` 绑定为唯一主人
+- 默认锁定 AstrBot / SnowLuma 镜像摘要，避免 latest 更新破坏核心补丁
+- 容器带健康检查；更新前自动备份，启动失败自动回滚
 - Docker Compose 管理 AstrBot + SnowLuma
 - SnowLuma 使用真实 Linux QQ，支持 OneBot v11
 - WebUI 和 noVNC 只绑定 `127.0.0.1`，通过 SSH 隧道访问
@@ -116,7 +118,7 @@
 
 | 层 | 技术 |
 |---|---|
-| 机器人框架 | AstrBot 4.29.3 |
+| 机器人框架 | AstrBot 4.29.x（默认锁定镜像摘要） |
 | QQ 协议端 | SnowLuma（Linux QQ + Xvfb + noVNC + OneBot v11） |
 | 对话模型 | DeepSeek |
 | 语音合成 | 火山引擎豆包 Seed-TTS / 声音复刻 2.0 |
@@ -177,7 +179,8 @@ flowchart LR
 │   └── CONFIGURATION.md
 ├── assets/stickers/dafeiyu/      # 100 张 GIF 及分类目录
 ├── docs/
-│   └── WINDOWS.md                # Windows 本地部署指南
+│   ├── WINDOWS.md                # Windows 本地部署指南
+│   └── INCREMENTAL.md            # 增量注入与底层加固
 └── scripts/
 ```
 
@@ -344,6 +347,26 @@ powershell -ExecutionPolicy Bypass -File scripts\install.ps1
 - 也可以用 Git Bash 运行 `bash scripts/install.sh`
 - 初始账号密码同样保存在 `data\INITIAL_CREDENTIALS.txt`
 - 详细步骤、Ollama 配置和常见问题见 [docs/WINDOWS.md](docs/WINDOWS.md)
+
+### 增量安装到已有 AstrBot + SnowLuma
+
+如果已经有一套能运行的 AstrBot + SnowLuma，不需要重装，只注入大肥鱼层：
+
+```bash
+bash scripts/inject.sh --path /opt/astrbot
+```
+
+Windows：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\inject.ps1 -Path D:\dafeiyu
+```
+
+- 只补插件、补丁、人格模板和配置示例
+- 不碰 `data/config`、`cmd_config.json`、`.env` 和用户 compose
+- 自动备份到 `backups/inject-<时间>/`
+- 注入后重启并做健康检查，失败自动回滚
+- 详细说明见 [docs/INCREMENTAL.md](docs/INCREMENTAL.md)
 
 ### 更新
 

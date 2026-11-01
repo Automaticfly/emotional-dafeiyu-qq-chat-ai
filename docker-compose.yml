@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.astrbot
+      args:
+        ASTRBOT_BASE_IMAGE: ${ASTRBOT_BASE_IMAGE:-soulter/astrbot@sha256:c93a6d19507ba45474c3dfb82aad9d36eb432a478112f13c7e6325b5ebffc5f2}
     image: dafeiyu-astrbot:latest
     container_name: astrbot
     restart: unless-stopped
@@ -24,11 +26,17 @@ services:
       options:
         max-size: "20m"
         max-file: "3"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS --max-time 5 http://127.0.0.1:6185/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
     networks:
       - dafeiyu
 
   snowluma:
-    image: motricseven7/snowluma:latest
+    image: ${SNOWLUMA_IMAGE:-motricseven7/snowluma@sha256:29536cd34e9c9c3f8a942be4e5cd6a17d366acd9b2096aa56b5863d024a80d23}
     container_name: snowluma
     restart: unless-stopped
     shm_size: "1gb"
@@ -60,6 +68,12 @@ services:
       options:
         max-size: "20m"
         max-file: "3"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS --max-time 5 http://127.0.0.1:5099/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
     depends_on:
       - astrbot
     networks:

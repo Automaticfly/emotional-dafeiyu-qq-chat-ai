@@ -62,3 +62,4 @@ backups/
 update.log
 .last_update_sha
 scripts/*.new
+.dafeiyu-layer.json

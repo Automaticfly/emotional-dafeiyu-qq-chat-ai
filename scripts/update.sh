@@ -27,6 +27,12 @@ COMMIT_API="https://api.github.com/repos/${REPO}/commits/${BRANCH}"
 STATE_FILE="${ROOT}/.last_update_sha"
 CURRENT_SCRIPT="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
 
+# 更新前的快照，用于健康检查失败时自动回滚。
+STAMP="$(date +%Y%m%d-%H%M%S)"
+BACKUP="$ROOT/backups/update-$STAMP"
+ROLLBACK_IMAGE="dafeiyu-astrbot:rollback-$STAMP"
+HAS_OLD_IMAGE=0
+
 # Windows Git Bash 使用 Windows 专用 compose（去掉 /etc/localtime 挂载）。
 COMPOSE_FILE="docker-compose.yml"
 case "$(uname -s)" in
@@ -96,6 +102,63 @@ compose() {
     fi
 }
 
+snapshot_update() {
+    mkdir -p "$BACKUP"
+    for rel in \
+        data/config data/cmd_config.json .env \
+        docker-compose.yml docker-compose.windows.yml Dockerfile.astrbot \
+        plugins data/plugins patches; do
+        [ -e "$ROOT/$rel" ] || continue
+        mkdir -p "$BACKUP/$(dirname "$rel")"
+        cp -a "$ROOT/$rel" "$BACKUP/$rel"
+    done
+    if docker image inspect dafeiyu-astrbot:latest >/dev/null 2>&1; then
+        docker tag dafeiyu-astrbot:latest "$ROLLBACK_IMAGE"
+        HAS_OLD_IMAGE=1
+    fi
+    log "已备份更新前文件和镜像：$BACKUP"
+}
+
+health_ok() {
+    curl -fsS --max-time 5 http://127.0.0.1:6185/ >/dev/null 2>&1
+}
+
+wait_health() {
+    local i
+    for i in $(seq 1 40); do
+        health_ok && return 0
+        sleep 3
+    done
+    return 1
+}
+
+rollback_update() {
+    log "健康检查失败，开始回滚到更新前版本"
+    if [ -d "$BACKUP" ]; then
+        for rel in \
+            data/config data/cmd_config.json .env \
+            docker-compose.yml docker-compose.windows.yml Dockerfile.astrbot \
+            plugins data/plugins patches; do
+            [ -e "$BACKUP/$rel" ] || continue
+            rm -rf "$ROOT/$rel"
+            mkdir -p "$(dirname "$ROOT/$rel")"
+            cp -a "$BACKUP/$rel" "$ROOT/$rel"
+        done
+        log "已恢复更新前文件：$BACKUP"
+    fi
+    if [ "$HAS_OLD_IMAGE" = 1 ]; then
+        docker tag "$ROLLBACK_IMAGE" dafeiyu-astrbot:latest
+        compose up -d --force-recreate astrbot || true
+    else
+        compose up -d --build || true
+    fi
+    if wait_health; then
+        log "回滚成功，AstrBot 已恢复；请查看日志排查本次更新失败原因。"
+    else
+        log "回滚后仍未恢复，请查看 docker compose logs astrbot。"
+    fi
+}
+
 fetch_commit_sha() {
     curl -fsSL --max-time 20 "$COMMIT_API" 2>/dev/null |
         sed -n 's/^[[:space:]]*"sha": "\([0-9a-f]\{40\}\)".*/\1/p' |
@@ -158,6 +221,7 @@ if [ "$CHECK_ONLY" = 0 ] && [ "$NO_RESTART" = 0 ]; then
         echo "已取消"
         exit 0
     }
+    snapshot_update
 fi
 
 if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
@@ -225,7 +289,6 @@ else
     SRC="$TMP_DIR/${REPO##*/}-${BRANCH}"
     [ -f "$SRC/docker-compose.yml" ] || die "压缩包结构不正确"
 
-    BACKUP="$ROOT/backups/update-$(date +%Y%m%d-%H%M%S)"
     mkdir -p "$BACKUP"
 
     backup_item() {
@@ -323,4 +386,18 @@ log "重建镜像并启动容器"
 compose build --pull
 compose up -d
 compose ps
-log "更新完成：${UPDATE_SHA:0:7}"
+
+if ! command -v curl >/dev/null 2>&1; then
+    log "没有找到 curl，跳过健康检查；请手动确认 AstrBot 是否正常。"
+    log "更新完成：${UPDATE_SHA:0:7}"
+    exit 0
+fi
+
+log "等待 AstrBot 健康检查（最多 2 分钟）"
+if wait_health; then
+    log "AstrBot 已恢复健康：http://127.0.0.1:6185/"
+    log "更新完成：${UPDATE_SHA:0:7}"
+else
+    rollback_update
+    exit 1
+fi

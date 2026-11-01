@@ -5,6 +5,36 @@
 
 ## [未发布]
 
+## [1.3.0] - 2026-11-01
+
+### 新增
+
+- 增量安装脚本：
+  - `scripts/inject.sh`：Linux 注入到已有 AstrBot + SnowLuma
+  - `scripts/inject.ps1`：Windows 注入
+  - 只补插件、补丁、人格模板和配置示例
+  - 不修改 `data/config`、`data/cmd_config.json`、`.env` 和用户 compose
+- 注入前自动备份到 `backups/inject-<时间>/`
+- 注入清单 `.dafeiyu-layer.json`，记录版本、提交、插件列表
+- 注入后健康检查，失败自动恢复插件/补丁/人格/配置并重启
+- 默认锁定 AstrBot 和 SnowLuma 镜像摘要，避免 `latest` 更新破坏核心补丁
+- 两个容器增加 Docker healthcheck
+- 更新脚本增加更新前快照、健康检查和失败自动回滚
+
+### 变更
+
+- `Dockerfile.astrbot` 使用 `ASTRBOT_BASE_IMAGE` 构建参数，默认锁定摘要
+- compose 使用 `ASTRBOT_BASE_IMAGE` / `SNOWLUMA_IMAGE`，可在 `.env` 主动升级
+- `update.sh` / `update.ps1` 更新前备份 `data/config`、`cmd_config.json`、`.env`、compose、Dockerfile、插件和补丁
+- 更新后轮询 AstrBot WebUI，失败自动恢复旧镜像和文件
+
+### 升级注意
+
+- 已有部署可以直接运行 `bash scripts/update.sh` 或 `scripts\update.ps1`
+- 只想补大肥鱼层、不重建整套部署时，用 `scripts/inject.sh` / `inject.ps1`
+- 锁定镜像后不会自动跟随 `latest`；需要主动升级时在 `.env` 设置新的镜像 tag 或 digest
+- 回滚镜像保留为 `dafeiyu-astrbot:rollback-<时间>`，确认稳定后可手动清理
+
 ## [1.2.5] - 2026-10-31
 
 ### 文档

@@ -1,4 +1,9 @@
-FROM soulter/astrbot:latest
+# 大肥鱼 AstrBot 镜像
+#
+# 默认锁定 AstrBot 基础镜像摘要，避免 latest 更新导致核心补丁失效。
+# 需要升级基础镜像时，在 .env 里设置 ASTRBOT_BASE_IMAGE 后重新 build。
+ARG ASTRBOT_BASE_IMAGE=soulter/astrbot@sha256:c93a6d19507ba45474c3dfb82aad9d36eb432a478112f13c7e6325b5ebffc5f2
+FROM ${ASTRBOT_BASE_IMAGE}
 
 RUN python -m pip install --no-cache-dir -i https://mirrors.aliyun.com/pypi/simple/ networkx pytz jieba aiofiles aiosqlite
 

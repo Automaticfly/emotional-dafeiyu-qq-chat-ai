@@ -38,6 +38,12 @@ $StateFile = Join-Path $Root '.last_update_sha'
 $ApiUrl = "https://api.github.com/repos/$Repo/commits/$Branch"
 $ZipUrl = "https://github.com/$Repo/archive/refs/heads/$Branch.zip"
 
+# 更新前快照，用于健康检查失败时自动回滚。
+$stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+$backup = Join-Path $Root ("backups\update-" + $stamp)
+$rollbackImage = "dafeiyu-astrbot:rollback-$stamp"
+$hasOldImage = $false
+
 function Write-Info([string]$Message) {
     Write-Host "[信息] $Message" -ForegroundColor Green
 }
@@ -67,6 +73,79 @@ function Invoke-Compose {
     }
 }
 
+function Snapshot-Update {
+    New-Item -ItemType Directory -Force -Path $backup | Out-Null
+    foreach ($rel in @(
+        'data\config', 'data\cmd_config.json', '.env',
+        'docker-compose.yml', 'docker-compose.windows.yml', 'Dockerfile.astrbot',
+        'plugins', 'data\plugins', 'patches'
+    )) {
+        $src = Join-Path $Root $rel
+        if (-not (Test-Path $src)) { continue }
+        $dst = Join-Path $backup $rel
+        New-Item -ItemType Directory -Force -Path (Split-Path -Parent $dst) | Out-Null
+        Copy-Item -Recurse -Force $src $dst
+    }
+    & docker image inspect dafeiyu-astrbot:latest *> $null
+    if ($LASTEXITCODE -eq 0) {
+        & docker tag dafeiyu-astrbot:latest $rollbackImage *> $null
+        $script:hasOldImage = $true
+    }
+    Write-Info "已备份更新前文件和镜像：$backup"
+}
+
+function Test-Health {
+    try {
+        $response = Invoke-WebRequest -Uri 'http://127.0.0.1:6185/' -UseBasicParsing -TimeoutSec 5
+        return $response.StatusCode -eq 200
+    } catch {
+        return $false
+    }
+}
+
+function Wait-Health {
+    for ($i = 0; $i -lt 40; $i++) {
+        if (Test-Health) { return $true }
+        Start-Sleep -Seconds 3
+    }
+    return $false
+}
+
+function Rollback-Update {
+    Write-Warn '健康检查失败，开始回滚到更新前版本'
+    if (Test-Path $backup) {
+        foreach ($rel in @(
+            'data\config', 'data\cmd_config.json', '.env',
+            'docker-compose.yml', 'docker-compose.windows.yml', 'Dockerfile.astrbot',
+            'plugins', 'data\plugins', 'patches'
+        )) {
+            $bak = Join-Path $backup $rel
+            if (-not (Test-Path $bak)) { continue }
+            $dest = Join-Path $Root $rel
+            if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
+            New-Item -ItemType Directory -Force -Path (Split-Path -Parent $dest) | Out-Null
+            Copy-Item -Recurse -Force $bak $dest
+        }
+        Write-Warn "已恢复更新前文件：$backup"
+    }
+    try {
+        if ($script:hasOldImage) {
+            & docker tag $rollbackImage dafeiyu-astrbot:latest *> $null
+            Invoke-Compose up -d --force-recreate astrbot | Out-Null
+        } else {
+            Invoke-Compose up -d --build astrbot | Out-Null
+        }
+    } catch {
+        Write-Err "回滚启动失败：$($_.Exception.Message)"
+        return
+    }
+    if (Wait-Health) {
+        Write-Warn '回滚成功，AstrBot 已恢复；请查看日志排查本次更新失败原因。'
+    } else {
+        Write-Err '回滚后仍未恢复，请查看 docker compose logs astrbot。'
+    }
+}
+
 # ---------------------------------------------------------------- 权限检查
 $probe = Join-Path $Root ".write-test-$PID"
 try {
@@ -89,6 +168,10 @@ if (-not $Check -and -not $NoRestart -and -not $Yes) {
         Write-Host '已取消'
         exit 0
     }
+}
+
+if (-not $Check -and -not $NoRestart) {
+    Snapshot-Update
 }
 
 # ---------------------------------------------------------------- git 模式
@@ -203,7 +286,6 @@ if ($isGit) {
             throw '压缩包结构不正确'
         }
 
-        $backup = Join-Path $Root ("backups\update-" + (Get-Date -Format 'yyyyMMdd-HHmmss'))
         New-Item -ItemType Directory -Force -Path $backup | Out-Null
 
         function Backup-Item([string]$Rel) {
@@ -289,4 +371,12 @@ Write-Info '重建镜像并启动容器'
 Invoke-Compose build
 Invoke-Compose up -d
 Invoke-Compose ps
-Write-Info "更新完成：$($updateSha.Substring(0, [Math]::Min(7, $updateSha.Length)))"
+
+Write-Info '等待 AstrBot 健康检查（最多 2 分钟）'
+if (Wait-Health) {
+    Write-Info 'AstrBot 已恢复健康：http://127.0.0.1:6185/'
+    Write-Info "更新完成：$($updateSha.Substring(0, [Math]::Min(7, $updateSha.Length)))"
+} else {
+    Rollback-Update
+    exit 1
+}
