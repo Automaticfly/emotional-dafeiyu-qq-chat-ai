@@ -14,6 +14,8 @@
 - 相册照片、照片备注和图片索引
 - 抽屉里的小事、收藏的表情包
 - 耳朵音乐库里的本地歌曲
+- B 站 Cookie、`SESSDATA`、`bili_jct`、登录二维码
+- 在线音乐插件的账号登录态
 - `data/INITIAL_CREDENTIALS.txt` 里的初始账号密码
 - `data/owner.json` 里的主人 QQ、UMO 和换主密码哈希
 - 插件实际配置（可能包含 QQ 号/UMO）
@@ -42,6 +44,8 @@ data/plugin_data/astrbot_plugin_dafeiyu_social/album/
 data/plugin_data/astrbot_plugin_dafeiyu_drawer/drawer.db
 data/plugin_data/astrbot_plugin_dafeiyu_drawer/stickers/
 data/plugin_data/astrbot_plugin_dafeiyu_ears/music/
+data/plugin_data/astrbot_plugin_listen_music/   # 可选在线音乐插件的 B 站登录态
+data/plugin_data/astrbot_plugin_bili_player/    # 0.2.5 的登录态
 data/INITIAL_CREDENTIALS.txt
 data/owner.json
 data/logs/
@@ -69,6 +73,7 @@ data/snowluma-qq-data/
 ```bash
 git status --short
 git grep -n -E 'api[_-]?key|access[_-]?token|password|passwd|Bearer|BEGIN .*PRIVATE KEY' || true
+git grep -n -E 'SESSDATA|bili_jct|buvid3|buvid4' || true
 git grep -n -E '[0-9]{6,}' || true
 ```
 
@@ -77,6 +82,8 @@ git grep -n -E '[0-9]{6,}' || true
 ## 第三方数据
 
 - 表情包来自公开项目 `diwer/ai-biaoqingbao`，仅建议个人非商业使用
+- 在线音乐插件「我想听歌！」/「bili播放器」来自公开项目，仓库只提供安装说明和兼容补丁
+- Bilibili 的音源、视频、账号和版权归 Bilibili 及各自权利人所有
 - FeiyuVoice 只作为音色来源说明；仓库不包含训练音频或云端 voice ID
 - AstrBot、SnowLuma、LivingMemory 分别遵循各自许可
 

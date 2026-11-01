@@ -100,7 +100,29 @@ data\INITIAL_CREDENTIALS.txt
 docker compose -f docker-compose.windows.yml restart snowluma
 ```
 
-### 5. 绑定主人
+### 5. 安装在线音乐（推荐）
+
+1. 打开 AstrBot WebUI → 插件市场
+2. 安装「我想听歌！」0.1.3 或「bili播放器」0.2.5（只装一个）
+3. 在项目根目录运行 412 补丁：
+
+```powershell
+docker cp scripts\patch_music_plugin.py astrbot:/tmp/patch_music_plugin.py
+docker compose -f docker-compose.windows.yml exec astrbot python /tmp/patch_music_plugin.py --path /AstrBot/data
+docker compose -f docker-compose.windows.yml restart astrbot
+```
+
+4. 在 QQ 里发 `搜索歌曲 晴天`，回复 `1` 测试
+
+> **提示**
+>
+> Windows compose 把仓库的 `plugins\` 挂到容器的 `/AstrBot/data/plugins`。
+> 插件市场安装的在线插件会出现在 `plugins\astrbot_plugin_*`，补丁脚本会同时
+> 查找 `plugins\` 和 `data\plugins\`。
+
+完整说明见 [MUSIC.md](MUSIC.md)。
+
+### 6. 绑定主人
 
 机器人建议用 **QQ 小号** 登录；你的大号用来认主。
 
@@ -194,6 +216,14 @@ powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1
 
 # 卸载并删除数据
 powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -Purge
+
+# 卸载并删除镜像
+powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -RemoveImages
+
+# 在线音乐插件补丁（安装/更新插件后运行）
+docker cp scripts\patch_music_plugin.py astrbot:/tmp/patch_music_plugin.py
+docker compose -f docker-compose.windows.yml exec astrbot python /tmp/patch_music_plugin.py --path /AstrBot/data
+docker compose -f docker-compose.windows.yml restart astrbot
 ```
 
 ## 为什么有 `docker-compose.windows.yml`
@@ -308,6 +338,25 @@ Windows 本地部署依赖电脑保持开机。可以在电源设置里关闭睡
 - 关闭正在读取 `data\` 的程序
 - 用管理员身份打开 PowerShell 再运行
 - 确认 Docker Desktop 已停止相关容器
+
+### 音乐提示“没有找到可播放版本”
+
+先运行在线音乐 412 补丁（见「5. 安装在线音乐」），重启后重试。仍然找不到时：
+
+- 换日文原名或歌手名，例如 `搜索歌曲 永世のクレイドル 鈴華ゆう子`
+- B 站视频可能已被删除（404），换一个版本
+- 确认只装了一个在线音乐插件
+
+### 音乐搜索有结果但发不出
+
+```powershell
+docker compose -f docker-compose.windows.yml exec astrbot ffmpeg -version
+docker compose -f docker-compose.windows.yml logs --tail 200 astrbot
+```
+
+- ffmpeg 不存在时，需要换带 ffmpeg 的镜像或重新构建
+- 语音失败时可以回复 `1 下载` 改发文件
+- 文件太大时检查适配器和插件的大小限制
 
 ## 和云端部署的区别
 

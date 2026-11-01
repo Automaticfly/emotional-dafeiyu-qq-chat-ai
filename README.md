@@ -9,7 +9,15 @@
 >
 > 详细声明见 [DISCLAIMER.md](DISCLAIMER.md)。
 
-**当前版本：v1.4.1** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
+**当前版本：v1.5.0（稳定版）** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
+
+> **v1.5.0 稳定版**
+>
+> 本版把在线 B 站音乐接入、本地音乐库、Windows/Linux 安装流程和 B 站 412 修复
+> 整合到一起。支持 Windows 10/11（Docker Desktop + WSL2）和 Linux
+> （Ubuntu 22.04+ / Debian 12+）；本地原生 AstrBot 也可以使用。
+>
+> 音乐功能的完整说明、安装、补丁和排查见 [docs/MUSIC.md](docs/MUSIC.md)。
 
 > **部署建议**
 >
@@ -104,12 +112,31 @@
 
 ### 耳朵
 
-- 插件市场「我想听歌！」（B 站）负责在线点歌：直接说「我要听…」
-- 本地音乐库保留：`/本地点歌 <关键词>`、`/本地听歌`、`/本地歌单`、`/本地分享`
-- 两套命令和工具分开，不会互相抢调用
+**在线音乐（插件市场，B 站）**
+
+- 插件市场「我想听歌！」0.1.3，或「bili播放器」0.2.5
+- 直接说「来一首晴天」「我想听永世的摇篮」，由模型选曲
+- 也可以 `搜索歌曲 晴天`，再回复序号听歌，回复 `1 下载` 发文件
+- 支持 BV / AV 号和 B 站视频链接
+- 语音最长 15 分钟、25 MiB；下载单文件最大 100 MiB
+- 未登录 B 站时可能被 412 拦截；本仓库提供
+  `scripts/patch_music_plugin.py` 匿名 Cookie 补丁，安装后运行一次即可
+- 详细说明、补丁步骤和排查见 [docs/MUSIC.md](docs/MUSIC.md)
+
+**本地音乐库**
+
+- `/本地点歌 <关键词>`、`/本地听歌`、`/本地歌单`、`/本地分享`
+- 支持 mp3/flac/m4a/wav/ogg/aac/opus，可以建子目录
 - 默认发文件，适合整首歌；可切换语音条或音乐卡片
 - 可选接入 Meting API 在线搜索，默认关闭
 - 主人分享 QQ 音乐卡片时，她会知道歌名并自然接一句，但不假装听过音频
+
+两套命令和工具完全分开：
+
+| 用途 | 命令 / 工具 |
+|---|---|
+| 在线/B 站点歌 | `搜索歌曲`；`find_music` / `deliver_music` / `search_music`（0.1.3） |
+| 本地音乐 | `/本地*`；`local_music_play` / `local_music_search` |
 
 ### QQ 空间动态
 
@@ -132,6 +159,18 @@
 - Ollama 只监听 Docker 网关，不直接暴露公网
 - 日志轮转、非 root 容器运行、seccomp/ptrace 按 SnowLuma 要求配置
 
+## 兼容性
+
+| 平台 | 支持方式 | 说明 |
+|---|---|---|
+| Linux | Docker Compose | Ubuntu 22.04+ / Debian 12+，推荐云服务器 |
+| Windows 10/11 | Docker Desktop + WSL2 | 使用 `docker-compose.windows.yml`，无需安装 Windows 版 QQ |
+| Windows / Linux 原生 | 已有 AstrBot | 用 `inject.sh` / `inject.ps1` 注入，或手动复制插件 |
+
+- 在线音乐插件要求 AstrBot `>=4.26,<5`，当前镜像为 4.29.x
+- 在线音乐需要容器内 `ffmpeg`；官方镜像已包含
+- 本地音乐不依赖 B 站，也不依赖在线插件
+
 ## 技术栈
 
 | 层 | 技术 |
@@ -143,10 +182,11 @@
 | 语音音色 | FeiyuVoice-CosyVoice3 参考音色（云端复刻版本） |
 | 向量模型 | Ollama `bge-m3` |
 | 长期记忆 | LivingMemory |
+| 在线音乐 | Bilibili（插件市场「我想听歌！」/「bili播放器」+ ffmpeg） |
 | 插件语言 | Python 3.10+（运行时 3.12） |
 | 数据 | SQLite / aiosqlite |
 | 编排 | Docker Compose |
-| 部署 | Ubuntu 22.04 / systemd / UFW / SSH 隧道 |
+| 部署 | Linux（Ubuntu 22.04+ / Debian 12+）；Windows 10/11（Docker Desktop + WSL2） |
 
 ## 架构
 
@@ -165,7 +205,14 @@ flowchart LR
     M -->|SSH 隧道| N[SnowLuma WebUI / noVNC]
 ```
 
-更详细的组件边界、数据流和插件职责见 [ARCHITECTURE.md](ARCHITECTURE.md)。
+在线音乐链路：
+
+```text
+AstrBot → 在线音乐插件 → Bilibili 搜索/音频 → ffmpeg → QQ 语音或文件
+```
+
+更详细的组件边界、数据流和插件职责见 [ARCHITECTURE.md](ARCHITECTURE.md)，
+音乐部分见 [docs/MUSIC.md](docs/MUSIC.md)。
 
 ## 仓库结构
 
@@ -200,17 +247,60 @@ flowchart LR
 ├── assets/stickers/dafeiyu/      # 100 张 GIF 及分类目录
 ├── docs/
 │   ├── WINDOWS.md                # Windows 本地部署指南
-│   └── INCREMENTAL.md            # 增量注入与底层加固
+│   ├── INCREMENTAL.md            # 增量注入与底层加固
+│   └── MUSIC.md                  # 在线 B 站 + 本地音乐完整说明
 └── scripts/
+    ├── install.sh / install.ps1  # Linux / Windows 安装
+    ├── update.sh / update.ps1    # 更新
+    ├── uninstall.sh / uninstall.ps1
+    ├── inject.sh / inject.ps1    # 增量注入
+    └── patch_music_plugin.py     # B 站 412 兼容补丁
 ```
+
+> **说明**
+>
+> 在线音乐插件「我想听歌！」/「bili播放器」来自 AstrBot 插件市场，
+> 不在本仓库内。本仓库只提供安装说明和兼容补丁。
 
 ## 快速开始
 
+### 0. 下载代码
+
+推荐用 Git：
+
+```bash
+git clone https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai.git
+cd emotional-dafeiyu-qq-chat-ai
+```
+
+没有安装 Git 时，打开仓库页面 → **Code → Download ZIP**，或到
+[Releases](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases)
+下载 `Source code (zip)`，解压后进入目录。
+
+下载完成后确认目录里有：
+
+```text
+docker-compose.yml
+docker-compose.windows.yml
+scripts/
+plugins/
+```
+
+> **提示**
+>
+> 不要直接在 ZIP 压缩包里运行脚本，要先解压。路径里尽量不要有中文和空格，
+> 避免 Docker 挂载和脚本路径出错。
+
 ### 1. 准备环境
 
-- Linux 服务器、Windows（Docker Desktop + WSL2）或本机 Docker
-- Docker Compose
-- 可选：Ollama、DeepSeek API、火山引擎 TTS、SnowLuma
+| 平台 | 要求 |
+|---|---|
+| Linux | Ubuntu 22.04+ / Debian 12+，Docker Engine + Compose v2，建议 4GB+ 内存、10GB+ 磁盘 |
+| Windows | Windows 10 2004+ / Windows 11，Docker Desktop（WSL2 后端），建议 8GB+ 内存、10GB+ 磁盘 |
+| 通用 | 能访问 GitHub、Docker Hub、DeepSeek / 火山引擎 / Bilibili；可选 Ollama |
+| 端口 | 本机 `6185`（AstrBot）、`5099`（SnowLuma）、`6081`（noVNC） |
+
+Windows 的完整前置条件、WSL2 设置和排错见 [docs/WINDOWS.md](docs/WINDOWS.md)。
 
 ### 2. 启动
 
@@ -232,11 +322,35 @@ bash scripts/install.sh
 7. 通过 noVNC 扫码登录 QQ
 8. 将 SnowLuma 的 `onebot.json` token 改成与 AstrBot 平台 token 一致
 
-### 3. 导入人格
+### 3. 安装在线音乐（推荐）
+
+1. 打开 AstrBot WebUI → 插件市场
+2. 搜索并安装「我想听歌！」0.1.3，或「bili播放器」0.2.5（只装一个）
+3. 在项目根目录运行 412 兼容补丁：
+
+```bash
+docker cp scripts/patch_music_plugin.py astrbot:/tmp/patch_music_plugin.py
+docker compose exec astrbot python /tmp/patch_music_plugin.py --path /AstrBot/data
+docker compose restart astrbot
+```
+
+Windows 使用：
+
+```powershell
+docker cp scripts\patch_music_plugin.py astrbot:/tmp/patch_music_plugin.py
+docker compose -f docker-compose.windows.yml exec astrbot python /tmp/patch_music_plugin.py --path /AstrBot/data
+docker compose -f docker-compose.windows.yml restart astrbot
+```
+
+4. 在 QQ 里发 `搜索歌曲 晴天`，回复 `1` 测试
+
+完整说明、0.1.3 与 0.2.5 的区别、B 站登录和排查见 [docs/MUSIC.md](docs/MUSIC.md)。
+
+### 4. 导入人格
 
 把 [persona/dafeiyu.md](persona/dafeiyu.md) 的正文导入 AstrBot 人格设置。
 
-### 4. 初始化记忆和向量模型
+### 5. 初始化记忆和向量模型
 
 ```bash
 ollama pull bge-m3
@@ -276,6 +390,11 @@ noVNC      密码在 .env 的 VNC_PASSWORD
 ```
 
 三个密码都会写进 `data/INITIAL_CREDENTIALS.txt`（权限 600）。登录后请立即修改密码并删除该文件。
+
+> **提示**
+>
+> 在线音乐插件「我想听歌！」/「bili播放器」不在本仓库内，需要安装后从插件市场
+> 单独安装，并运行一次 412 补丁。完整步骤见 [docs/MUSIC.md](docs/MUSIC.md)。
 
 ### 绑定主人
 
@@ -356,17 +475,67 @@ newgrp docker
 
 ### Windows 本地部署
 
-Windows 上用 Docker Desktop（WSL2 后端）运行，不需要云服务器：
+Windows 上用 Docker Desktop（WSL2 后端）运行，不需要云服务器。
+
+前置条件：
+
+- Windows 10 2004+ 或 Windows 11
+- Docker Desktop，启用 WSL2 后端，鲸鱼图标变绿
+- 建议 8GB 以上内存、10GB 以上磁盘
+- 已开启 CPU 虚拟化
+
+安装：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\install.ps1
 ```
 
+脚本会自动创建 `data\`、生成 `.env`、构建并启动容器，初始账号密码保存在：
+
+```text
+data\INITIAL_CREDENTIALS.txt
+```
+
+打开：
+
+```text
+http://127.0.0.1:6185          AstrBot
+http://127.0.0.1:5099          SnowLuma
+http://127.0.0.1:6081/vnc.html?autoconnect=1   noVNC
+```
+
+在线音乐插件安装后，在项目根目录运行补丁：
+
+```powershell
+docker cp scripts\patch_music_plugin.py astrbot:/tmp/patch_music_plugin.py
+docker compose -f docker-compose.windows.yml exec astrbot python /tmp/patch_music_plugin.py --path /AstrBot/data
+docker compose -f docker-compose.windows.yml restart astrbot
+```
+
+日常更新 / 卸载：
+
+```powershell
+# 检查更新
+powershell -ExecutionPolicy Bypass -File scripts\update.ps1 -Check
+
+# 更新
+powershell -ExecutionPolicy Bypass -File scripts\update.ps1
+
+# 卸载（保留 data\ 和 .env）
+powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1
+
+# 卸载并删除数据
+powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -Purge
+
+# 卸载并删除镜像
+powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -RemoveImages
+```
+
 - 使用 `docker-compose.windows.yml`，去掉了 Linux 专用的 `/etc/localtime` 挂载
-- PowerShell 脚本覆盖安装、更新、卸载
+- Windows compose 把仓库的 `plugins\` 直接挂到容器的 `/AstrBot/data/plugins`
+- 市场安装的第三方插件会出现在 `plugins\`，不要提交到 Git 仓库
 - 也可以用 Git Bash 运行 `bash scripts/install.sh`
-- 初始账号密码同样保存在 `data\INITIAL_CREDENTIALS.txt`
-- 详细步骤、Ollama 配置和常见问题见 [docs/WINDOWS.md](docs/WINDOWS.md)
+- 详细步骤、Ollama 配置、端口排查见 [docs/WINDOWS.md](docs/WINDOWS.md)
 
 ### 增量安装到已有 AstrBot + SnowLuma
 
@@ -386,21 +555,33 @@ powershell -ExecutionPolicy Bypass -File scripts\inject.ps1 -Path D:\dafeiyu
 - 不碰 `data/config`、`cmd_config.json`、`.env` 和用户 compose
 - 自动备份到 `backups/inject-<时间>/`
 - 注入后重启并做健康检查，失败自动回滚
+- 在线音乐插件需要另外从市场安装，并运行 412 补丁；见 [docs/MUSIC.md](docs/MUSIC.md)
 - 详细说明见 [docs/INCREMENTAL.md](docs/INCREMENTAL.md)
 
 ### 更新
+
+Linux：
 
 ```bash
 bash scripts/update.sh          # 同步 GitHub 最新代码并重启
 bash scripts/update.sh --check  # 只看有没有新版本
 ```
 
+Windows：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\update.ps1 -Check
+powershell -ExecutionPolicy Bypass -File scripts\update.ps1
+```
+
 - `git clone` 的部署：`git fetch` + 快进合并
 - 下载 zip 的部署：从 GitHub 拉取压缩包，只替换代码和插件
-- 始终保留 `data/` 和 `.env`
+- 始终保留 `data/`、`.env`，以及你自己放进 `plugins/` / `data/plugins/` 的额外插件
 - 旧文件备份到 `backups/update-<时间>/`
+- 在线音乐插件如果被市场更新，412 补丁可能被覆盖；更新后重新运行
+  `scripts/patch_music_plugin.py`，再重启 AstrBot
 
-更新时如果提示权限不足，同样用 `sudo bash scripts/update.sh`，或先加入 docker 组。
+更新时如果提示权限不足，Linux 用 `sudo bash scripts/update.sh`，或先加入 docker 组。
 
 每天自动同步：
 
@@ -410,13 +591,44 @@ bash scripts/update.sh --check  # 只看有没有新版本
 
 ### 卸载
 
+Linux：
+
 ```bash
-bash scripts/uninstall.sh              # 停容器，保留 data/ 和 .env
-bash scripts/uninstall.sh --purge      # 连 data/、.env 一起删除
-bash scripts/uninstall.sh --remove-images
+bash scripts/uninstall.sh                 # 停容器，保留 data/ 和 .env
+bash scripts/uninstall.sh -y              # 不询问
+bash scripts/uninstall.sh --purge         # 连 data/、.env 一起删除
+bash scripts/uninstall.sh --remove-images # 同时删除项目镜像
 ```
 
-完整选项、cron/systemd 示例和排查方法见 [scripts/README.md](scripts/README.md)。
+Windows：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1
+powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -Purge
+powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -RemoveImages
+```
+
+卸载范围：
+
+| 操作 | 容器 | `data/` | `.env` | 镜像 | `backups/` |
+|---|---|---|---|---|---|
+| 默认 | 删除 | 保留 | 保留 | 保留 | 保留 |
+| `--purge` / `-Purge` | 删除 | 删除 | 删除 | 保留 | 保留 |
+| `--remove-images` / `-RemoveImages` | 删除 | 保留 | 保留 | 删除 | 保留 |
+
+> **警告**
+>
+> `--purge` 会删除聊天记录、长期记忆、涟漪池、相册、QQ 登录态和本地音乐库，
+> 执行前请先备份 `data/`。
+
+程序目录本身不会被删除。彻底清理 Linux：
+
+```bash
+rm -rf /opt/astrbot
+```
+
+Windows 删除整个项目文件夹即可。完整选项、cron/systemd 示例和排查方法见
+[scripts/README.md](scripts/README.md)。
 
 ## 命令
 
@@ -437,6 +649,9 @@ bash scripts/uninstall.sh --remove-images
 /认主          用大号私聊绑定主人
 /抽屉          查看抽屉
 /抽屉 表情包   发一张收藏的表情包
+搜索歌曲 晴天  在线 B 站搜索（插件市场）
+1              选择第 1 首并发送语音
+1 下载         下载第 1 首音频文件
 /本地点歌      本地音乐库点歌
 /本地听歌      随机本地歌曲
 /本地分享      分享本地歌曲
@@ -451,9 +666,28 @@ bash scripts/uninstall.sh --remove-images
 /动态自动      查看自动动态配置
 ```
 
+> **提示**
+>
+> `搜索歌曲`、序号选择、`1 下载` 由插件市场的在线音乐插件提供，需要先安装并
+> 打 412 补丁；`/本地*` 由本仓库的耳朵插件提供，不需要在线插件。
+> 两套命令可以同时使用。完整说明见 [docs/MUSIC.md](docs/MUSIC.md)。
+
+## 音乐常见问题
+
+| 现象 | 先检查 |
+|---|---|
+| 有些歌提示“没有找到可播放版本” | 是否运行了 412 补丁；换日文原名/歌手名重搜 |
+| 搜索有结果但发不出语音 | 容器内 `ffmpeg -version`；改回 `1 下载` 试文件 |
+| 两个音乐插件抢命令 | 只保留 0.1.3「我想听歌！」或 0.2.5「bili播放器」其中一个 |
+| 本地歌单 0 首 | 音频是否放进 `data/plugin_data/astrbot_plugin_dafeiyu_ears/music/` |
+| 更新插件后又找不到 | 重新运行 `scripts/patch_music_plugin.py` 并重启 |
+
+更多排查见 [docs/MUSIC.md](docs/MUSIC.md)。
+
 ## 仓库不包含的依赖
 
 - AstrBot 和 SnowLuma 的完整源码：使用官方镜像
+- 在线音乐插件「我想听歌！」/「bili播放器」：从 AstrBot 插件市场安装，仓库只带兼容补丁脚本
 - FeiyuVoice-CosyVoice3 的 7.4GB 本地权重：当前部署使用云端声音复刻
 - Ollama 模型文件：通过 `ollama pull bge-m3` 获取
 - 任何真实账号、密钥、聊天记录或记忆数据库
@@ -467,6 +701,8 @@ bash scripts/uninstall.sh --remove-images
 - `data_v4.db`、聊天记录、LivingMemory 数据库
 - `plugin_data`、日记、画像、日程、心绪手札、涟漪池
 - 相册照片和照片备注
+- 本地音乐库里的歌曲文件
+- 在线音乐插件的 B 站 Cookie、登录态或二维码
 - `data/INITIAL_CREDENTIALS.txt`（初始账号密码）
 - 登录二维码、语音样本、日志、截图
 - 个人服务器 IP、SSH 密钥、密码
@@ -483,6 +719,7 @@ LivingMemory、FeiyuVoice、表情包素材等第三方组件分别遵循各自�
 
 - AstrBot：<https://github.com/AstrBotDevs/AstrBot>
 - SnowLuma：<https://github.com/SnowLuma/SnowLuma>
+- 在线音乐插件「我想听歌！」/「bili播放器」：<https://github.com/57Darling02/astrbot_plugin_bili_player>
 - LivingMemory：<https://github.com/lxfight-s-Astrbot-Plugins/astrbot_plugin_livingmemory>
 - FeiyuVoice：<https://github.com/Esmerubphire/astrbot_plugin_feiyu_voice>
 - 表情包：<https://github.com/diwer/ai-biaoqingbao>

@@ -21,6 +21,16 @@
 - 许可：源码可见非商业许可，具体以项目 `LICENSE` / `EULA.md` 为准
 - 本仓库不包含 SnowLuma 源码或 QQ 客户端
 
+## 在线音乐插件（可选）
+
+- 项目：<https://github.com/57Darling02/astrbot_plugin_bili_player>
+- 旧名/旧目录：`astrbot_plugin_listen_music`（「我想听歌！」0.1.3）
+- 用途：Bilibili 搜索、语音/文件发送、视频与音频下载
+- 本仓库**不包含**该插件源码，只提供安装说明和
+  `scripts/patch_music_plugin.py` 兼容补丁
+- 该仓库未声明明确许可证；使用、修改和再分发前请自行确认作者条款
+- 补丁只修改部署者本地已安装的 `core/bilibili.py`，不改变插件归属
+
 ## LivingMemory
 
 - 项目：<https://github.com/lxfight-s-Astrbot-Plugins/astrbot_plugin_livingmemory>

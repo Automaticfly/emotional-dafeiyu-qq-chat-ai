@@ -2,6 +2,10 @@
 data/*
 !data/.gitkeep
 !data/README.md
+
+# Third-party market plugins (Windows compose mounts ./plugins)
+plugins/astrbot_plugin_listen_music/
+plugins/astrbot_plugin_bili_player/
 config/cmd_config.json
 config/*.local.json
 .env

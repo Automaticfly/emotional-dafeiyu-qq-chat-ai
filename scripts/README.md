@@ -1,6 +1,6 @@
 # 部署脚本
 
-三个脚本都从项目根目录执行，也可以先 `cd scripts` 再运行。
+这些脚本都从项目根目录执行，也可以先 `cd scripts` 再运行。
 
 | 脚本 | 作用 |
 |---|---|
@@ -8,6 +8,7 @@
 | `update.sh` | 从 GitHub 同步最新代码，重建并重启容器 |
 | `uninstall.sh` | 停止并删除容器，可选删除数据 |
 | `inject.sh` | 增量注入到已有 AstrBot + SnowLuma，不碰 data/config |
+| `patch_music_plugin.py` | 给已安装的 B 站音乐插件补匿名 Cookie / 412 重试 |
 
 Windows 原生 PowerShell 脚本：
 
@@ -25,6 +26,19 @@ Windows 完整步骤见 [docs/WINDOWS.md](../docs/WINDOWS.md)。
 第一次部署建议让 AI 协助：把仓库链接、系统环境（Windows / Linux）、Docker Desktop 状态和报错信息发给 AI，让它按 README、[docs/WINDOWS.md](../docs/WINDOWS.md) 和本文件带你一步步排查。
 
 不要把真实 API Key、QQ 号、密码、聊天记录或 `data/` 内容发给 AI。
+
+## 下载
+
+推荐：
+
+```bash
+git clone https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai.git
+cd emotional-dafeiyu-qq-chat-ai
+```
+
+没有 Git 时，从 GitHub 页面 **Code → Download ZIP** 或 Releases 下载
+`Source code (zip)`，解压后进入目录。确认有 `docker-compose.yml`、`scripts/`、
+`plugins/` 后再运行安装脚本。
 
 ## 安装
 
@@ -139,6 +153,43 @@ powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -Purge
 - 初始账号密码写入 `data\INITIAL_CREDENTIALS.txt`
 - 正在运行的 `update.ps1` 会更新为 `update.ps1.new`，下次手动替换
 - 完整说明见 [docs/WINDOWS.md](../docs/WINDOWS.md)
+
+## 音乐插件补丁
+
+如果安装了插件市场的「我想听歌！」0.1.3 或「bili播放器」0.2.5，建议运行一次
+`patch_music_plugin.py`，修复 B 站未登录时的 HTTP 412。
+
+Docker（Linux）：
+
+```bash
+docker cp scripts/patch_music_plugin.py astrbot:/tmp/patch_music_plugin.py
+docker compose exec astrbot python /tmp/patch_music_plugin.py --path /AstrBot/data
+docker compose restart astrbot
+```
+
+Docker（Windows）：
+
+```powershell
+docker cp scripts\patch_music_plugin.py astrbot:/tmp/patch_music_plugin.py
+docker compose -f docker-compose.windows.yml exec astrbot python /tmp/patch_music_plugin.py --path /AstrBot/data
+docker compose -f docker-compose.windows.yml restart astrbot
+```
+
+原生 AstrBot（宿主机有 Python）：
+
+```bash
+python3 scripts/patch_music_plugin.py --path /opt/astrbot
+```
+
+```powershell
+python scripts\patch_music_plugin.py --path D:\AstrBot
+```
+
+- 幂等：已经打过补丁会输出 `[OK] ... 跳过`
+- 备份：`backups/plugin-patches/<插件名>_bilibili.py.orig.bak`
+- 只检查不写入：加 `--dry-run`
+- 插件更新/重装后补丁可能被覆盖，需要重新运行
+- 完整说明见 [docs/MUSIC.md](../docs/MUSIC.md)
 
 ## 增量安装
 

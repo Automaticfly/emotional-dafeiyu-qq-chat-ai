@@ -5,6 +5,66 @@
 
 ## [未发布]
 
+## [1.5.0] - 2026-11-01
+
+### 新增
+
+- 在线音乐接入方案：插件市场「我想听歌！」0.1.3 /「bili播放器」0.2.5
+  - 自然语言点歌，或 `搜索歌曲 <关键词>` 后回复序号
+  - 语音优先，失败回退音频文件
+  - 支持 `1 下载`、BV/AV 号和 B 站视频链接
+- B 站 412 兼容补丁 `scripts/patch_music_plugin.py`
+  - 自动添加匿名设备 Cookie（`buvid3` / `buvid4` / `b_nut` / `b_lsid` / `_uuid`）
+  - 遇到 HTTP 412 自动换 Cookie 重试一次
+  - 同时支持 0.1.3 和 0.2.5，幂等、可重复运行
+  - 修改前备份原文件，修改后做 Python 语法检查
+- 完整的音乐文档 `docs/MUSIC.md`
+  - 在线 B 站音乐与本地音乐库的分工
+  - Windows、Linux、Docker、原生 AstrBot 的安装和补丁步骤
+  - B 站登录、命令、限制、排查、更新和卸载
+- README 增加下载、Windows/Linux 安装、更新、卸载的完整步骤和提示
+- 命令手册增加在线音乐命令和两套工具名对照
+
+### 变更
+
+- 在线音乐和本地音乐统一为一条稳定链路：
+  - 在线：`搜索歌曲` / 自然语言 / 序号选择
+  - 本地：`/本地点歌`、`/本地听歌`、`/本地歌单`、`/本地分享`
+- 文档明确只保留一个在线音乐插件，避免 0.1.3 和 0.2.5 同时注册 `搜索歌曲`
+- README、ARCHITECTURE、THIRD_PARTY_NOTICES、PRIVACY、scripts/README、
+  docs/WINDOWS、docs/INCREMENTAL 同步更新
+
+### 修复
+
+- 修复 B 站未登录请求返回 HTTP 412，导致部分歌曲被误判为“找不到”
+  - 实测《永世的摇篮》从 0 个候选恢复到 8 个
+  - 《晴天》10 个、《夜曲》6 个、《后来》9 个、《Lemon》9 个
+- 修复本机残留的 `bili播放器` 0.2.5 仍显示在 WebUI 的问题
+  - 目录删除后需要重启 AstrBot 才能卸载内存中的旧插件
+- 本地音乐命令继续使用 `/本地*`，不再和在线插件抢 `/点歌`
+
+### 升级注意
+
+- 不需要迁移数据库或本地音乐库
+- 已经安装在线音乐插件的部署，升级后请运行一次：
+
+  ```bash
+  docker cp scripts/patch_music_plugin.py astrbot:/tmp/patch_music_plugin.py
+  docker compose exec astrbot python /tmp/patch_music_plugin.py --path /AstrBot/data
+  docker compose restart astrbot
+  ```
+
+- Windows 使用 `docker-compose.windows.yml` 和 PowerShell 对应命令
+- 只保留一个在线音乐插件；如果同时装了 0.1.3 和 0.2.5，请在插件管理里卸载一个
+- 在线插件在 AstrBot 里更新或重装后，补丁可能被覆盖，需要重新运行补丁脚本
+
+### 安全
+
+- 仓库不包含 B 站 Cookie、二维码、账号密码或登录态
+- B 站 Cookie 只填在插件配置/登录页，不要发到聊天、Issue 或仓库
+- 本地音乐文件不建议提交到公开仓库，版权归各自权利人
+- 在线音乐仅用于个人学习、研究和个人非商业使用
+
 ## [1.4.1] - 2026-11-01
 
 ### 变更

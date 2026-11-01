@@ -24,6 +24,7 @@ flowchart TB
         V[火山引擎 TTS]
         D[DeepSeek API]
         Q[QQ 空间]
+        BI[Bilibili API<br/>在线音乐插件]
     end
 
     U --> S
@@ -31,6 +32,7 @@ flowchart TB
     B --> D
     B --> V
     B --> O
+    B -->|搜索 / 音频| BI
     B -->|send_qzone_msg| S
     S --> Q
     A -->|SSH| T1
@@ -68,6 +70,7 @@ flowchart TB
 | `astrbot_plugin_dafeiyu_owner` | `/认主` 绑定主人，写入插件配置和 AstrBot 管理员列表 |
 | `astrbot_plugin_dafeiyu_drawer` | 表情包收藏、主人小事实时记录与注入 |
 | `astrbot_plugin_dafeiyu_ears` | 本地音乐点歌、听歌、分享歌曲 |
+| `astrbot_plugin_listen_music` / `astrbot_plugin_bili_player`（可选，市场） | 在线 B 站搜索、语音/文件、下载 |
 | `astrbot_plugin_dafeiyu_context` | 折叠长上下文，降低 token |
 | `astrbot_plugin_livingmemory` | 长期记忆、反思、向量检索、记忆工具 |
 | `astrbot_plugin_face_convert` | 文字表情 → QQ 原生表情，媒体入站翻译，语音开关 |
@@ -79,6 +82,7 @@ flowchart TB
 | 服务 | 用途 | 数据边界 |
 |---|---|---|
 | DeepSeek | 文本对话 | 对话内容经 API 发送 |
+| Bilibili API | 在线音乐搜索、视频详情、音频流 | 查询词和视频信息经 API 发送；B 站 Cookie 只存插件数据目录 |
 | 火山引擎 Seed-TTS | 语音合成 | 文本发送至 TTS API |
 | Ollama `bge-m3` | 记忆向量、涟漪相似度 | 记忆文本在本地服务器内处理 |
 | LivingMemory SQLite | 长期记忆 | 只存于 `data/plugin_data` |
@@ -153,6 +157,29 @@ data/plugin_data/astrbot_plugin_dafeiyu_social/
 - 群友发图不入库，只收管理员私聊
 - 备注只存一句话，不索引图片内容
 
+## 4.2 音乐链路
+
+在线音乐（插件市场，可选）：
+
+```text
+QQ 用户 -> AstrBot -> 在线音乐插件 -> Bilibili 搜索/详情/音频
+        -> ffmpeg 封装 -> QQ 语音或文件
+```
+
+- 未登录时使用匿名设备 Cookie；412 时自动换 Cookie 重试
+- 候选只来自 B 站，不跨音源替换
+- 媒体文件在发送期间写入临时目录，发送后清理
+
+本地音乐（本仓库耳朵插件）：
+
+```text
+QQ 用户 -> /本地* 命令 -> 扫描 data/plugin_data/astrbot_plugin_dafeiyu_ears/music/
+        -> 发送文件 / 语音条 / 音乐卡片
+```
+
+两套命令和工具名不同，可以同时启用。详见
+[docs/MUSIC.md](docs/MUSIC.md)。
+
 ## 5. 数据流与隐私边界
 
 ```text
@@ -160,7 +187,7 @@ data/
 ├── cmd_config.json          # 平台、Provider、密钥（不提交）
 ├── data_v4.db               # 会话与历史（不提交）
 ├── config/                  # 插件配置（不提交）
-├── plugin_data/             # 记忆、心绪、日记、画像（不提交）
+├── plugin_data/             # 记忆、心绪、日记、画像、B 站登录态、本地音乐（不提交）
 ├── logs/                    # 日志（不提交）
 └── snowluma/                # QQ 登录态、OneBot 配置（不提交）
 ```
@@ -168,7 +195,8 @@ data/
 公开仓库只保存：
 
 - 插件源码
-- 补丁源码
+- AstrBot 核心补丁源码
+- 音乐插件兼容补丁脚本
 - Compose / Dockerfile
 - 公开人格模板
 - 公共表情包素材

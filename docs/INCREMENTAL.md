@@ -113,6 +113,38 @@ http://127.0.0.1:6185/
 docker compose logs astrbot
 ```
 
+## 在线音乐插件（可选）
+
+`inject.sh` / `inject.ps1` 不会安装插件市场的在线音乐插件，只注入本仓库自带的
+大肥鱼插件。需要在线点歌时：
+
+1. 在 AstrBot 插件市场安装「我想听歌！」0.1.3 或「bili播放器」0.2.5（只装一个）
+2. 运行 412 补丁：
+
+Docker：
+
+```bash
+docker cp scripts/patch_music_plugin.py astrbot:/tmp/patch_music_plugin.py
+docker compose exec astrbot python /tmp/patch_music_plugin.py --path /AstrBot/data
+docker compose restart astrbot
+```
+
+原生 AstrBot：
+
+```bash
+python3 scripts/patch_music_plugin.py --path /opt/astrbot
+```
+
+Windows：
+
+```powershell
+python scripts\patch_music_plugin.py --path D:\dafeiyu
+```
+
+- 补丁会同时查找 `plugins/` 和 `data/plugins/`
+- 插件更新或重装后需要重新运行
+- 完整说明见 [MUSIC.md](MUSIC.md)
+
 ## 补丁说明
 
 `patches/` 只有目标 Dockerfile 里存在 `COPY patches/...` 时才会在重建后生效。
