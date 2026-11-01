@@ -237,9 +237,9 @@ class DafeiyuEarsPlugin(Star):
             logger.exception("[ears] 注入分享歌曲信息失败")
 
     # ------------------------------------------------------------------ tools
-    @filter.llm_tool(name="ears_play")
-    async def ears_play(self, event: AstrMessageEvent, keyword: str = "") -> str:
-        """点一首歌并发送给主人。
+    @filter.llm_tool(name="local_music_play")
+    async def local_music_play(self, event: AstrMessageEvent, keyword: str = "") -> str:
+        """从本地音乐库点一首歌并发送给主人。
 
         Args:
             keyword(string): 歌名或关键词；留空随机放一首。
@@ -285,8 +285,8 @@ class DafeiyuEarsPlugin(Star):
             logger.exception("[ears] 点歌失败")
             return "放歌时出了点小问题。"
 
-    @filter.llm_tool(name="ears_search")
-    async def ears_search(
+    @filter.llm_tool(name="local_music_search")
+    async def local_music_search(
         self, event: AstrMessageEvent, keyword: str = "", limit: int = 5
     ) -> str:
         """搜索本地或在线歌曲。
@@ -314,9 +314,9 @@ class DafeiyuEarsPlugin(Star):
         return "\n".join(lines)
 
     # ---------------------------------------------------------------- commands
-    @filter.command("点歌")
+    @filter.command("本地点歌")
     async def cmd_song(self, event: AstrMessageEvent):
-        """Search and send a song."""
+        """Search and send a local song."""
         if not self._is_admin(event):
             yield event.plain_result("这个只给主人用。")
             return
@@ -326,12 +326,12 @@ class DafeiyuEarsPlugin(Star):
             yield event.plain_result(f"刚放过，等 {left} 秒再点。")
             return
         args = (event.message_str or "").strip()
-        for prefix in ("/点歌", "点歌"):
+        for prefix in ("/本地点歌", "本地点歌"):
             if args.startswith(prefix):
                 args = args[len(prefix) :].strip()
                 break
         if not args:
-            yield event.plain_result("要听什么？例如 /点歌 晴天。")
+            yield event.plain_result("要听什么？例如 /本地点歌 晴天。")
             return
         try:
             matches = self._search_local(args)
@@ -351,7 +351,7 @@ class DafeiyuEarsPlugin(Star):
             logger.exception("[ears] /点歌 失败")
             yield event.plain_result("放歌时出了点小问题。")
 
-    @filter.command("听歌")
+    @filter.command("本地听歌")
     async def cmd_listen(self, event: AstrMessageEvent):
         """Play a random local song."""
         if not self._is_admin(event):
@@ -373,7 +373,7 @@ class DafeiyuEarsPlugin(Star):
         except ValueError as exc:
             yield event.plain_result(str(exc))
 
-    @filter.command("歌单")
+    @filter.command("本地歌单")
     async def cmd_playlist(self, event: AstrMessageEvent):
         """List local songs."""
         if not self._is_admin(event):
@@ -388,22 +388,22 @@ class DafeiyuEarsPlugin(Star):
             lines.append(f"{index}. {path.stem}")
         if len(files) > 20:
             lines.append("……")
-        lines.append("用 /点歌 <关键词> 播放。")
+        lines.append("用 /本地点歌 <关键词> 播放。")
         yield event.plain_result("\n".join(lines))
 
-    @filter.command("分享歌曲")
+    @filter.command("本地分享")
     async def cmd_share(self, event: AstrMessageEvent):
-        """Share a song as a music card or file."""
+        """Share a local song."""
         if not self._is_admin(event):
             yield event.plain_result("这个只给主人用。")
             return
         args = (event.message_str or "").strip()
-        for prefix in ("/分享歌曲", "分享歌曲"):
+        for prefix in ("/本地分享", "本地分享"):
             if args.startswith(prefix):
                 args = args[len(prefix) :].strip()
                 break
         if not args:
-            yield event.plain_result("要分享什么？例如 /分享歌曲 晴天。")
+            yield event.plain_result("要分享什么？例如 /本地分享 晴天。")
             return
         try:
             matches = self._search_local(args)

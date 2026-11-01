@@ -9,7 +9,7 @@
 >
 > 详细声明见 [DISCLAIMER.md](DISCLAIMER.md)。
 
-**当前版本：v1.4.0** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
+**当前版本：v1.4.1** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
 
 > **部署建议**
 >
@@ -104,8 +104,9 @@
 
 ### 耳朵
 
-- 本地音乐库：把 mp3/flac/m4a/wav 放进 `music/` 目录
-- `/点歌 <关键词>`、`/听歌`、`/歌单`、`/分享歌曲`
+- 插件市场「我想听歌！」（B 站）负责在线点歌：直接说「我要听…」
+- 本地音乐库保留：`/本地点歌 <关键词>`、`/本地听歌`、`/本地歌单`、`/本地分享`
+- 两套命令和工具分开，不会互相抢调用
 - 默认发文件，适合整首歌；可切换语音条或音乐卡片
 - 可选接入 Meting API 在线搜索，默认关闭
 - 主人分享 QQ 音乐卡片时，她会知道歌名并自然接一句，但不假装听过音频
@@ -436,9 +437,9 @@ bash scripts/uninstall.sh --remove-images
 /认主          用大号私聊绑定主人
 /抽屉          查看抽屉
 /抽屉 表情包   发一张收藏的表情包
-/点歌          点一首歌
-/听歌          随机听一首
-/分享歌曲      分享歌曲
+/本地点歌      本地音乐库点歌
+/本地听歌      随机本地歌曲
+/本地分享      分享本地歌曲
 /相册          查看相册和备注
 /相册备注      给最新一张照片加一句备注
 /上下文        查看最近上下文
