@@ -9,7 +9,7 @@
 >
 > 详细声明见 [DISCLAIMER.md](DISCLAIMER.md)。
 
-**当前版本：v1.3.0** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
+**当前版本：v1.4.0** · [更新日志](CHANGELOG.md) · [发行版](https://github.com/Automaticfly/emotional-dafeiyu-qq-chat-ai/releases) · [发版流程](RELEASING.md)
 
 > **部署建议**
 >
@@ -93,6 +93,23 @@
 - 可以让她把某张照片再发回来
 - 按会话隔离，群友发图不会自动入库
 
+### 抽屉
+
+- **表情包抽屉**：自动收藏主人私聊/主人在群里发的 GIF 和小图，按 sha256 去重
+- 支持 `/抽屉 表情包 [关键词]`，也可以让她用工具主动发
+- **小事抽屉**：主人说「喜欢什么」「几点睡」「什么习惯」时当场记下
+- 不需要等凌晨结算，也不用主人说第二遍
+- 主人私聊时把相关小事注入 system prompt；群聊不注入，避免泄露
+- `/抽屉`、`/抽屉 找`、`/抽屉 记`、`/抽屉 删`
+
+### 耳朵
+
+- 本地音乐库：把 mp3/flac/m4a/wav 放进 `music/` 目录
+- `/点歌 <关键词>`、`/听歌`、`/歌单`、`/分享歌曲`
+- 默认发文件，适合整首歌；可切换语音条或音乐卡片
+- 可选接入 Meting API 在线搜索，默认关闭
+- 主人分享 QQ 音乐卡片时，她会知道歌名并自然接一句，但不假装听过音频
+
 ### QQ 空间动态
 
 - 手动发布文字/多图动态
@@ -165,6 +182,8 @@ flowchart LR
 │   ├── astrbot_plugin_dafeiyu_memory2/
 │   ├── astrbot_plugin_dafeiyu_ripple/
 │   ├── astrbot_plugin_dafeiyu_owner/
+│   ├── astrbot_plugin_dafeiyu_drawer/
+│   ├── astrbot_plugin_dafeiyu_ears/
 │   ├── astrbot_plugin_dafeiyu_context/
 │   ├── astrbot_plugin_dafeiyu_social/
 │   ├── astrbot_plugin_dafeiyu_moodface/
@@ -415,6 +434,11 @@ bash scripts/uninstall.sh --remove-images
 /涟漪 摘录     立刻摘一次最近聊天
 /涟漪 记       手动放一件小事进池子
 /认主          用大号私聊绑定主人
+/抽屉          查看抽屉
+/抽屉 表情包   发一张收藏的表情包
+/点歌          点一首歌
+/听歌          随机听一首
+/分享歌曲      分享歌曲
 /相册          查看相册和备注
 /相册备注      给最新一张照片加一句备注
 /上下文        查看最近上下文

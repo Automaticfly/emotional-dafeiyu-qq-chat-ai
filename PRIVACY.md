@@ -12,6 +12,8 @@
 - `plugin_data` 中的心脏、日记、画像、日程
 - 涟漪池数据库和其中摘录的日常碎事
 - 相册照片、照片备注和图片索引
+- 抽屉里的小事、收藏的表情包
+- 耳朵音乐库里的本地歌曲
 - `data/INITIAL_CREDENTIALS.txt` 里的初始账号密码
 - `data/owner.json` 里的主人 QQ、UMO 和换主密码哈希
 - 插件实际配置（可能包含 QQ 号/UMO）
@@ -37,6 +39,9 @@ data/plugin_data/
 data/plugin_data/astrbot_plugin_dafeiyu_ripple/ripple.db
 data/plugin_data/astrbot_plugin_dafeiyu_social/album.db
 data/plugin_data/astrbot_plugin_dafeiyu_social/album/
+data/plugin_data/astrbot_plugin_dafeiyu_drawer/drawer.db
+data/plugin_data/astrbot_plugin_dafeiyu_drawer/stickers/
+data/plugin_data/astrbot_plugin_dafeiyu_ears/music/
 data/INITIAL_CREDENTIALS.txt
 data/owner.json
 data/logs/

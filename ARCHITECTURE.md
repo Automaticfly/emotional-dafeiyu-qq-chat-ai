@@ -66,6 +66,8 @@ flowchart TB
 | `astrbot_plugin_dafeiyu_memory2` | 日记 2.0、主人画像、短期日程 |
 | `astrbot_plugin_dafeiyu_ripple` | 涟漪记忆：日常碎事的衰减记忆池 |
 | `astrbot_plugin_dafeiyu_owner` | `/认主` 绑定主人，写入插件配置和 AstrBot 管理员列表 |
+| `astrbot_plugin_dafeiyu_drawer` | 表情包收藏、主人小事实时记录与注入 |
+| `astrbot_plugin_dafeiyu_ears` | 本地音乐点歌、听歌、分享歌曲 |
 | `astrbot_plugin_dafeiyu_context` | 折叠长上下文，降低 token |
 | `astrbot_plugin_livingmemory` | 长期记忆、反思、向量检索、记忆工具 |
 | `astrbot_plugin_face_convert` | 文字表情 → QQ 原生表情，媒体入站翻译，语音开关 |

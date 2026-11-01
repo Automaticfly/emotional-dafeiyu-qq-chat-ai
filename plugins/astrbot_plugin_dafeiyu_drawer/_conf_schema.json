@@ -1,0 +1,62 @@
+{
+  "enabled": {
+    "description": "启用抽屉",
+    "hint": "关闭后不自动收集、不注入、不响应命令。",
+    "type": "bool",
+    "default": true
+  },
+  "owner_qq": {
+    "description": "主人 QQ（可选）",
+    "hint": "留空时自动读取 data/owner.json 或 social 插件的 admin_qq。",
+    "type": "string",
+    "default": ""
+  },
+  "owner_umo": {
+    "description": "主人私聊 UMO（可选）",
+    "hint": "例如 napcat:FriendMessage:123456；留空自动读取。",
+    "type": "string",
+    "default": ""
+  },
+  "auto_capture": {
+    "description": "实时抓取主人的小事",
+    "hint": "主人说「我喜欢」「我几点睡」「我习惯」时当场记下。",
+    "type": "bool",
+    "default": true
+  },
+  "inject_notes": {
+    "description": "在私聊里注入抽屉内容",
+    "hint": "只对主人私聊注入；群聊不注入，避免泄露。",
+    "type": "bool",
+    "default": true
+  },
+  "max_inject_notes": {
+    "description": "单次最多注入几条",
+    "hint": "默认 5 条，总字数控制在 200 字以内。",
+    "type": "int",
+    "default": 5
+  },
+  "sticker_collect": {
+    "description": "自动收集主人表情包",
+    "hint": "只收主人私聊，或主人在群里发的 GIF/小图。",
+    "type": "bool",
+    "default": true
+  },
+  "sticker_only_gif": {
+    "description": "只收 GIF",
+    "hint": "开启后只收藏 .gif；关闭后 GIF 和小于上限的图片都收。",
+    "type": "bool",
+    "default": false
+  },
+  "sticker_max_mb": {
+    "description": "表情包大小上限（MB）",
+    "hint": "超过这个大小的图片不收藏，默认 1.5MB。",
+    "type": "float",
+    "default": 1.5
+  },
+  "sticker_max_count": {
+    "description": "表情包最多保留张数",
+    "hint": "超出后删除最旧的，默认 300 张。",
+    "type": "int",
+    "default": 300
+  }
+}

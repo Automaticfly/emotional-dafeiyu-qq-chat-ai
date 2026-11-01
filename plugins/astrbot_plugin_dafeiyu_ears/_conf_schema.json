@@ -1,0 +1,56 @@
+{
+  "enabled": {
+    "description": "启用耳朵",
+    "hint": "关闭后不响应点歌、听歌和分享歌曲。",
+    "type": "bool",
+    "default": true
+  },
+  "admin_qq": {
+    "description": "管理员 QQ（可选）",
+    "hint": "留空则私聊可用、群聊默认不可用。",
+    "type": "string",
+    "default": ""
+  },
+  "admin_umo": {
+    "description": "管理员会话 UMO（可选）",
+    "hint": "例如 napcat:FriendMessage:123456。",
+    "type": "string",
+    "default": ""
+  },
+  "allow_groups": {
+    "description": "允许在群聊点歌",
+    "hint": "默认关闭，避免在群里刷屏。",
+    "type": "bool",
+    "default": false
+  },
+  "music_dir": {
+    "description": "本地音乐目录",
+    "hint": "相对插件数据目录，默认 music；支持 mp3/flac/m4a/wav/ogg/aac/opus。",
+    "type": "string",
+    "default": "music"
+  },
+  "send_mode": {
+    "description": "发送方式",
+    "hint": "file = 发文件（推荐整首歌）；record = 发语音条；card = 在线歌曲卡片。",
+    "type": "string",
+    "default": "file"
+  },
+  "max_file_mb": {
+    "description": "单首文件大小上限（MB）",
+    "hint": "超过这个大小不发送，默认 30MB。",
+    "type": "float",
+    "default": 30
+  },
+  "cooldown_seconds": {
+    "description": "点歌冷却（秒）",
+    "hint": "同一会话两次点歌至少间隔这么久，默认 10 秒。",
+    "type": "int",
+    "default": 10
+  },
+  "meting_api": {
+    "description": "Meting API（可选）",
+    "hint": "留空只用本地音乐。填写后在线搜索，例如 https://api.injahow.cn/meting/。第三方接口可用性和版权由使用者自行确认。",
+    "type": "string",
+    "default": ""
+  }
+}

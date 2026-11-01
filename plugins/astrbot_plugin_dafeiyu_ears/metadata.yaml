@@ -1,0 +1,6 @@
+name: astrbot_plugin_dafeiyu_ears
+display_name: 大肥鱼耳朵
+author: dafeiyu-tools
+version: 1.0.0
+desc: 本地音乐点歌、随机听歌、分享歌曲；可选接入 Meting 在线搜索。
+short_desc: 点歌、听歌和分享歌曲
